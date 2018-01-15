@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -129,7 +130,7 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     String getCurrentDate() {
         LocalDate localDate = LocalDate.now();
-        System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate));
+        //System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate));
         return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate);
     }
 
@@ -549,7 +550,11 @@ public class dailyUpdate extends javax.swing.JFrame {
         //System.out.println((FindFullHrs()/3600)+" -> hours");
         System.out.println(getDailyOutHours("Sampath") / 3600 + " -> Out hours");
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
-         //System.out.println((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600)+" -> working hours for this day");  
+        
+        
+        Calendar now = Calendar.getInstance();   // Gets the current date and time
+        int year = now.get(Calendar.YEAR); 
+        System.out.println(year+" ->yrar");  
         // System.out.println(getFixedHours(cmbName)+" -> fixed hours");
         //System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
     }//GEN-LAST:event_jButton1ActionPerformed

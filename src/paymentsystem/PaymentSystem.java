@@ -32,7 +32,7 @@ public class PaymentSystem {
          Connection conn = null;
          
          try {
-                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/payment?","root", "");
+                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supreme?","root", "");
         } catch (SQLException e) {
             System.out.println("Connection Fail.. check output consol..!");
             e.printStackTrace(); 
