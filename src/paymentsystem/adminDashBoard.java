@@ -13,8 +13,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+import paymentsystem.dailyUpdate;
 /**
  *
  * @author madsampath
@@ -28,12 +33,47 @@ public class adminDashBoard extends javax.swing.JFrame {
      * Creates new form dailyUpdate
      */
     public adminDashBoard() throws SQLException {
+     
         conn = DB_connect.connect();
         initComponents();
         loadDateCombo();
         loadNameCombo();
+        tableLoad();
+        //jPanel1.setBackground(new Color(0,0,10,130));
+    }
+     public void tableLoad() {
+        try {
+            String sqlQuery = "SELECT * FROM `monthlypaymenttable`";
+            pst = conn.prepareStatement(sqlQuery);
+            rs = pst.executeQuery();
+            paidAmountTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
+    
+    String getCurrentDate() {
+        LocalDate localDate = LocalDate.now();
+        //System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate));
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate);
+    }
+  String FindMemberId(String name) {
+        try {
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                String Mname = rs.getString("memberName");
+                if (Mname.equals(name)) {
+                    return rs.getString("memberId");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
+    }
     void loadDateCombo(){
         Calendar now = Calendar.getInstance();   // Gets the current date and time
         int year = now.get(Calendar.YEAR);
@@ -61,6 +101,7 @@ public class adminDashBoard extends javax.swing.JFrame {
            while(rs.next()){
                String name = rs.getString("memberName");
                cmbox_name.addItem(name);
+               cmb_SearchMemberName.addItem(name);
            }
         } catch (Exception e) {
         }
@@ -80,28 +121,29 @@ public class adminDashBoard extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        txt_Search = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        paidAmountTable = new javax.swing.JTable();
+        cmb_SearchMemberName = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btn_start = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         lbl_totNormalHours = new javax.swing.JLabel();
-        lbl_selectedMembeName2 = new javax.swing.JLabel();
+        lbl_OtHours = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lbl_netSal = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        lbl_selectedMembeName4 = new javax.swing.JLabel();
+        lbl_totOt = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        lbl_selectedMembeName5 = new javax.swing.JLabel();
+        lbl_tot = new javax.swing.JLabel();
         btn_start1 = new javax.swing.JButton();
         cmb_yearmonth = new javax.swing.JComboBox();
         cmbox_name = new javax.swing.JComboBox();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -117,7 +159,7 @@ public class adminDashBoard extends javax.swing.JFrame {
 
         jPanel2.setLayout(null);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        paidAmountTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -128,28 +170,20 @@ public class adminDashBoard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(paidAmountTable);
 
         jPanel2.add(jScrollPane1);
-        jScrollPane1.setBounds(20, 100, 480, 160);
+        jScrollPane1.setBounds(20, 60, 480, 200);
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel3.setText("Search By");
-        jPanel2.add(jLabel3);
-        jLabel3.setBounds(290, 30, 60, 30);
-        jPanel2.add(txt_Search);
-        txt_Search.setBounds(70, 30, 160, 26);
+        cmb_SearchMemberName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member Name" }));
+        jPanel2.add(cmb_SearchMemberName);
+        cmb_SearchMemberName.setBounds(200, 20, 140, 26);
 
-        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel7.setText("Search ");
-        jPanel2.add(jLabel7);
-        jLabel7.setBounds(20, 30, 50, 30);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member ID", "Member Name" }));
-        jPanel2.add(jComboBox2);
-        jComboBox2.setBounds(370, 30, 140, 26);
+        jLabel4.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel4.setText("Search By");
+        jPanel2.add(jLabel4);
+        jLabel4.setBounds(120, 20, 60, 30);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(150, 80, 540, 280);
@@ -169,70 +203,70 @@ public class adminDashBoard extends javax.swing.JFrame {
         btn_start.setBounds(560, 120, 100, 40);
 
         jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel6.setForeground(new java.awt.Color(51, 51, 255));
         jLabel6.setText("Member Name");
         jPanel1.add(jLabel6);
         jLabel6.setBounds(290, 10, 100, 40);
 
         jLabel8.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel8.setForeground(new java.awt.Color(51, 51, 255));
         jLabel8.setText("Date");
         jPanel1.add(jLabel8);
         jLabel8.setBounds(30, 10, 100, 40);
 
         jLabel9.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel9.setForeground(new java.awt.Color(51, 51, 255));
         jLabel9.setText("Total Normal Hours");
         jPanel1.add(jLabel9);
         jLabel9.setBounds(30, 70, 130, 40);
 
-        lbl_totNormalHours.setForeground(new java.awt.Color(102, 255, 102));
+        lbl_totNormalHours.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_totNormalHours.setText("0");
         jPanel1.add(lbl_totNormalHours);
         lbl_totNormalHours.setBounds(160, 70, 150, 40);
 
-        lbl_selectedMembeName2.setForeground(new java.awt.Color(102, 255, 102));
-        lbl_selectedMembeName2.setText("20");
-        jPanel1.add(lbl_selectedMembeName2);
-        lbl_selectedMembeName2.setBounds(430, 70, 150, 40);
+        lbl_OtHours.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_OtHours.setText("0");
+        jPanel1.add(lbl_OtHours);
+        lbl_OtHours.setBounds(430, 70, 150, 40);
 
         jLabel10.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel10.setForeground(new java.awt.Color(51, 51, 255));
         jLabel10.setText("Total OT Hours");
         jPanel1.add(jLabel10);
         jLabel10.setBounds(330, 70, 130, 40);
 
         jLabel11.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel11.setForeground(new java.awt.Color(51, 51, 255));
         jLabel11.setText("Net Salary");
         jPanel1.add(jLabel11);
         jLabel11.setBounds(30, 110, 130, 40);
 
-        lbl_netSal.setForeground(new java.awt.Color(102, 255, 102));
-        lbl_netSal.setText("20000");
+        lbl_netSal.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_netSal.setText("0");
         jPanel1.add(lbl_netSal);
         lbl_netSal.setBounds(160, 110, 150, 40);
 
         jLabel12.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel12.setForeground(new java.awt.Color(51, 51, 255));
         jLabel12.setText("OT Salary");
         jPanel1.add(jLabel12);
         jLabel12.setBounds(330, 110, 130, 40);
 
-        lbl_selectedMembeName4.setForeground(new java.awt.Color(102, 255, 102));
-        lbl_selectedMembeName4.setText("5000");
-        jPanel1.add(lbl_selectedMembeName4);
-        lbl_selectedMembeName4.setBounds(430, 110, 150, 40);
+        lbl_totOt.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_totOt.setText("0");
+        jPanel1.add(lbl_totOt);
+        lbl_totOt.setBounds(430, 110, 150, 40);
 
         jLabel13.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel13.setText("Total Salary");
+        jLabel13.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel13.setText("Aditional");
         jPanel1.add(jLabel13);
         jLabel13.setBounds(30, 150, 130, 40);
 
-        lbl_selectedMembeName5.setForeground(new java.awt.Color(102, 255, 102));
-        lbl_selectedMembeName5.setText("25000");
-        jPanel1.add(lbl_selectedMembeName5);
-        lbl_selectedMembeName5.setBounds(160, 150, 150, 40);
+        lbl_tot.setForeground(new java.awt.Color(0, 153, 51));
+        jPanel1.add(lbl_tot);
+        lbl_tot.setBounds(150, 210, 150, 40);
 
         btn_start1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/genarate.png"))); // NOI18N
         btn_start1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153)));
@@ -244,15 +278,39 @@ public class adminDashBoard extends javax.swing.JFrame {
         jPanel1.add(btn_start1);
         btn_start1.setBounds(570, 30, 71, 70);
 
+        cmb_yearmonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Date" }));
         jPanel1.add(cmb_yearmonth);
         cmb_yearmonth.setBounds(100, 20, 160, 26);
 
+        cmbox_name.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Member" }));
         jPanel1.add(cmbox_name);
         cmbox_name.setBounds(390, 20, 160, 26);
 
+        jLabel14.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel14.setText("Total Salary");
+        jPanel1.add(jLabel14);
+        jLabel14.setBounds(30, 210, 130, 40);
+
+        jLabel3.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel3.setText("0");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(160, 150, 120, 40);
+
+        jButton1.setText("Calculate Total");
+        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255)));
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+        jButton1.setBounds(560, 180, 100, 40);
+
         getContentPane().add(jPanel1);
         jPanel1.setBounds(40, 390, 720, 250);
-        jPanel1.setBackground(new Color(0,0,10,130));
+        //jPanel1.setBackground(new Color(0,0,10,130));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Register.jpg"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -266,19 +324,23 @@ public class adminDashBoard extends javax.swing.JFrame {
         String name = cmbox_name.getSelectedItem().toString();
         System.out.println(name);
         String normHours = null;
+        String otHours = null;
         
         String date = cmb_yearmonth.getSelectedItem().toString();
         System.out.println(date);
         try {
             
-            String hours = "SELECT SUM(`NormalHours`) AS numberOfHours FROM `dailyhours` WHERE `MemberName`= '"+name+"' AND `Date` LIKE '"+date+"%'";
-            String salNormalHours = "SELECT `ratePerNormalHour` FROM `unitpayment` WHERE `MemberName`= '"+name+"'";
+            String hours = "SELECT SUM(`NormalHours`) AS numberOfHours, SUM(`OtHours`) AS numberOfOtHours FROM `dailyhours` WHERE `MemberName`= '"+name+"' AND `Date` LIKE '"+date+"%'";
+            String salNormalHours = "SELECT `ratePerNormalHour`, `ratePerOtHour` FROM `unitpayment` WHERE `MemberName`= '"+name+"'";
             pst = conn.prepareStatement(hours);
             rs = pst.executeQuery(hours);
             
             while(rs.next()){
                 normHours = rs.getString("numberOfHours");
+                otHours = rs.getString("numberOfOtHours");
+                lbl_OtHours.setText(otHours);
                 lbl_totNormalHours.setText(normHours);
+               
             }
             
             pst = null;
@@ -289,21 +351,57 @@ public class adminDashBoard extends javax.swing.JFrame {
             
             while(rs.next()){
                 String salNormHours = rs.getString("ratePerNormalHour");
+                String salOtHours = rs.getString("ratePerOtHour");
                 int salHours = Integer.parseInt(salNormHours);
                 int numberHours = Integer.parseInt(normHours);
                 
+                int salOt = Integer.parseInt(salOtHours);
+                int numberOt = Integer.parseInt(otHours);
+                
                 String netSal = Integer.toString(salHours * numberHours);
                 lbl_netSal.setText(netSal);
+                String netOt = Integer.toString(salOt*numberOt);
+                lbl_totOt.setText(netOt);
+                lbl_tot.setText(Integer.toString((salHours*numberHours)+(salOt*numberOt)));
+                salHours =0;
+                numberHours=0;
+                salOt=0;
+                numberOt = 0;
+                netOt=null;
+            
             }
             
         } catch (Exception e) {
         }
         
+        
+        
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_start1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_start1ActionPerformed
         // TODO add your handling code here:
+        String MemberId = FindMemberId(cmbox_name.getSelectedItem().toString()); 
+        String MemberName = cmbox_name.getSelectedItem().toString();
+        String Date = getCurrentDate();
+        String PaidAmount = lbl_tot.getText();
+        String ToPayAmount = jLabel3.getText();
+        try {
+            String CurrentStatusQuary = "INSERT INTO `monthlypaymenttable`(`MemberId`, `MemberName`, `Date`, `PaidAmount`, `ToPay`) VALUES ('" + MemberId + "','" + MemberName + "','" + Date + "','" + PaidAmount + "','" + ToPayAmount + "')";
+            //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
+
+            pst = conn.prepareStatement(CurrentStatusQuary);
+            pst.execute();   //System.out.println(getgender());
+            JOptionPane.showMessageDialog(null, "Rs."+PaidAmount+" Paid Success fully");
+            tableLoad();
+        } catch (Exception e) {
+        }
+       
     }//GEN-LAST:event_btn_start1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,29 +446,30 @@ public class adminDashBoard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_start;
     private javax.swing.JButton btn_start1;
+    private javax.swing.JComboBox cmb_SearchMemberName;
     private javax.swing.JComboBox cmb_yearmonth;
     private javax.swing.JComboBox cmbox_name;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_OtHours;
     private javax.swing.JLabel lbl_netSal;
-    private javax.swing.JLabel lbl_selectedMembeName2;
-    private javax.swing.JLabel lbl_selectedMembeName4;
-    private javax.swing.JLabel lbl_selectedMembeName5;
+    private javax.swing.JLabel lbl_tot;
     private javax.swing.JLabel lbl_totNormalHours;
-    private javax.swing.JTextField txt_Search;
+    private javax.swing.JLabel lbl_totOt;
+    private javax.swing.JTable paidAmountTable;
     // End of variables declaration//GEN-END:variables
 }
