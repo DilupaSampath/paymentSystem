@@ -424,6 +424,13 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
 
+        btn_pause.setVisible(true);
+        btn_Restart.setVisible(true);
+        btn_start.setVisible(false);
+        btn_stop.setVisible(true);
+
+        
+        
         String memberName = cmbx_currentMembers.getSelectedItem().toString();
 
         try {
@@ -463,6 +470,12 @@ public class dailyUpdate extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_pauseActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
+      
+        btn_pause.setVisible(true);
+        btn_Restart.setVisible(true);
+        btn_start.setVisible(true);
+        btn_stop.setVisible(true);
+        
         updateDailyStatusTable("OffTime");
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
         System.out.println(cmbName);
@@ -535,6 +548,7 @@ public class dailyUpdate extends javax.swing.JFrame {
                     btn_stop.setVisible(true);
                     btn_pause.setVisible(true);
                 }
+                status =null;
             }
 
         } catch (Exception e) {
@@ -546,17 +560,16 @@ public class dailyUpdate extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         System.out.println(CurrentTime());
-         // System.out.println(FindFullHrs()+" -> working seconds for this day");
-        //System.out.println((FindFullHrs()/3600)+" -> hours");
-        System.out.println(getDailyOutHours("Sampath") / 3600 + " -> Out hours");
+       
+       //System.out.println(getDailyOutHours("Sampath") / 3600 + " -> Out hours");
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
         
         
-        Calendar now = Calendar.getInstance();   // Gets the current date and time
-        int year = now.get(Calendar.YEAR); 
-        System.out.println(year+" ->yrar");  
-        // System.out.println(getFixedHours(cmbName)+" -> fixed hours");
-        //System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
+        //Calendar now = Calendar.getInstance();   // Gets the current date and time
+       // int year = now.get(Calendar.YEAR); 
+       // System.out.println(year+" ->yrar");  
+      //  System.out.println(getFixedHours(cmbName)+" -> fixed hours");
+        System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
