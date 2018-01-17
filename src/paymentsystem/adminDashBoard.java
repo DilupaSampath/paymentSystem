@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 import paymentsystem.dailyUpdate;
+
 /**
  *
  * @author madsampath
@@ -29,11 +30,12 @@ public class adminDashBoard extends javax.swing.JFrame {
     Connection conn = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
+
     /**
      * Creates new form dailyUpdate
      */
     public adminDashBoard() throws SQLException {
-     
+
         conn = DB_connect.connect();
         initComponents();
         loadDateCombo();
@@ -41,7 +43,8 @@ public class adminDashBoard extends javax.swing.JFrame {
         tableLoad();
         //jPanel1.setBackground(new Color(0,0,10,130));
     }
-     public void tableLoad() {
+
+    public void tableLoad() {
         try {
             String sqlQuery = "SELECT * FROM `monthlypaymenttable`";
             pst = conn.prepareStatement(sqlQuery);
@@ -52,13 +55,13 @@ public class adminDashBoard extends javax.swing.JFrame {
         }
     }
 
-    
     String getCurrentDate() {
         LocalDate localDate = LocalDate.now();
         //System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate));
         return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate);
     }
-  String FindMemberId(String name) {
+
+    String FindMemberId(String name) {
         try {
             String sql = "SELECT * FROM `memberdetails`";
             pst = conn.prepareStatement(sql);
@@ -74,41 +77,41 @@ public class adminDashBoard extends javax.swing.JFrame {
         }
         return null;
     }
-    void loadDateCombo(){
+
+    void loadDateCombo() {
         Calendar now = Calendar.getInstance();   // Gets the current date and time
         int year = now.get(Calendar.YEAR);
-        cmb_yearmonth.addItem(year+"-01");
-        cmb_yearmonth.addItem(year+"-02");
-        cmb_yearmonth.addItem(year+"-03");
-        cmb_yearmonth.addItem(year+"-04");
-        cmb_yearmonth.addItem(year+"-05");
-        cmb_yearmonth.addItem(year+"-06");
-        cmb_yearmonth.addItem(year+"-07");
-        cmb_yearmonth.addItem(year+"-08");
-        cmb_yearmonth.addItem(year+"-09");
-        cmb_yearmonth.addItem(year+"-10");
-        cmb_yearmonth.addItem(year+"-11");
-        cmb_yearmonth.addItem(year+"-12");
-        
+        cmb_yearmonth.addItem(year + "-01");
+        cmb_yearmonth.addItem(year + "-02");
+        cmb_yearmonth.addItem(year + "-03");
+        cmb_yearmonth.addItem(year + "-04");
+        cmb_yearmonth.addItem(year + "-05");
+        cmb_yearmonth.addItem(year + "-06");
+        cmb_yearmonth.addItem(year + "-07");
+        cmb_yearmonth.addItem(year + "-08");
+        cmb_yearmonth.addItem(year + "-09");
+        cmb_yearmonth.addItem(year + "-10");
+        cmb_yearmonth.addItem(year + "-11");
+        cmb_yearmonth.addItem(year + "-12");
+
     }
-    
-    void loadNameCombo(){
+
+    void loadNameCombo() {
         try {
             String sql = "SELECT * FROM `memberdetails`";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery(sql);
-            
-           while(rs.next()){
-               String name = rs.getString("memberName");
-               cmbox_name.addItem(name);
-               cmb_SearchMemberName.addItem(name);
-           }
+
+            while (rs.next()) {
+                String name = rs.getString("memberName");
+                cmbox_name.addItem(name);
+                cmb_SearchMemberName.addItem(name);
+            }
         } catch (Exception e) {
         }
-        
-    
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,6 +147,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -308,6 +312,15 @@ public class adminDashBoard extends javax.swing.JFrame {
         jPanel1.add(jButton1);
         jButton1.setBounds(560, 180, 100, 40);
 
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2);
+        jButton2.setBounds(330, 180, 73, 23);
+
         getContentPane().add(jPanel1);
         jPanel1.setBounds(40, 390, 720, 250);
         //jPanel1.setBackground(new Color(0,0,10,130));
@@ -325,62 +338,61 @@ public class adminDashBoard extends javax.swing.JFrame {
         System.out.println(name);
         String normHours = null;
         String otHours = null;
-        
+
         String date = cmb_yearmonth.getSelectedItem().toString();
         System.out.println(date);
         try {
-            
-            String hours = "SELECT SUM(`NormalHours`) AS numberOfHours, SUM(`OtHours`) AS numberOfOtHours FROM `dailyhours` WHERE `MemberName`= '"+name+"' AND `Date` LIKE '"+date+"%'";
-            String salNormalHours = "SELECT `ratePerNormalHour`, `ratePerOtHour` FROM `unitpayment` WHERE `MemberName`= '"+name+"'";
+
+            String hours = "SELECT SUM(`NormalHours`) AS numberOfHours, SUM(`OtHours`) AS numberOfOtHours FROM `dailyhours` WHERE `MemberName`= '" + name + "' AND `Date` LIKE '" + date + "%'";
+            String salNormalHours = "SELECT `ratePerNormalHour`, `ratePerOtHour` FROM `unitpayment` WHERE `MemberName`= '" + name + "'";
             pst = conn.prepareStatement(hours);
             rs = pst.executeQuery(hours);
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 normHours = rs.getString("numberOfHours");
                 otHours = rs.getString("numberOfOtHours");
                 lbl_OtHours.setText(otHours);
                 lbl_totNormalHours.setText(normHours);
-               
+
             }
-            
+
             pst = null;
             rs = null;
-            
+
             pst = conn.prepareStatement(salNormalHours);
             rs = pst.executeQuery(salNormalHours);
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 String salNormHours = rs.getString("ratePerNormalHour");
                 String salOtHours = rs.getString("ratePerOtHour");
                 int salHours = Integer.parseInt(salNormHours);
                 int numberHours = Integer.parseInt(normHours);
-                
+
                 int salOt = Integer.parseInt(salOtHours);
                 int numberOt = Integer.parseInt(otHours);
-                
+
                 String netSal = Integer.toString(salHours * numberHours);
                 lbl_netSal.setText(netSal);
-                String netOt = Integer.toString(salOt*numberOt);
+                String netOt = Integer.toString(salOt * numberOt);
                 lbl_totOt.setText(netOt);
-                lbl_tot.setText(Integer.toString((salHours*numberHours)+(salOt*numberOt)));
-                salHours =0;
-                numberHours=0;
-                salOt=0;
+                lbl_tot.setText(Integer.toString((salHours * numberHours) + (salOt * numberOt)));
+                salHours = 0;
+                numberHours = 0;
+                salOt = 0;
                 numberOt = 0;
-                netOt=null;
-            
+                netOt = null;
+
             }
-            
+
         } catch (Exception e) {
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_start1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_start1ActionPerformed
         // TODO add your handling code here:
-        String MemberId = FindMemberId(cmbox_name.getSelectedItem().toString()); 
+        String MemberId = FindMemberId(cmbox_name.getSelectedItem().toString());
         String MemberName = cmbox_name.getSelectedItem().toString();
         String Date = getCurrentDate();
         String PaidAmount = lbl_tot.getText();
@@ -391,17 +403,24 @@ public class adminDashBoard extends javax.swing.JFrame {
 
             pst = conn.prepareStatement(CurrentStatusQuary);
             pst.execute();   //System.out.println(getgender());
-            JOptionPane.showMessageDialog(null, "Rs."+PaidAmount+" Paid Success fully");
+            JOptionPane.showMessageDialog(null, "Rs." + PaidAmount + " Paid Success fully");
             tableLoad();
         } catch (Exception e) {
         }
-       
+
     }//GEN-LAST:event_btn_start1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String totSal = lbl_tot.getText();
+        SendMail s1 = new SendMail("madsampath94@gmail.com","Salary Slip"+cmb_yearmonth.getSelectedItem().toString(),totSal+"\n"+totSal,"madsampath94@gmail.com","dsmax071");
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -450,6 +469,7 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JComboBox cmb_yearmonth;
     private javax.swing.JComboBox cmbox_name;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
