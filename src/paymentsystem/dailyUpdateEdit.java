@@ -8,6 +8,7 @@ package paymentsystem;
 import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import dbConnect.DB_connect;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,6 +40,7 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
         txt_AutoId.setEnabled(false);
         loadDateCombo();
         loadNameCombo() ;
+        seticon();
     }
     void loadNameCombo() {
         try {
@@ -362,4 +364,8 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
     private javax.swing.JTextField txt_Mname;
     private javax.swing.JTextField txt_Time;
     // End of variables declaration//GEN-END:variables
+
+   private void seticon() {
+     setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("madIcon1_1.jpg")));
+    }
 }
