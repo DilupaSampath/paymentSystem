@@ -43,7 +43,22 @@ public class adminDashBoard extends javax.swing.JFrame {
         tableLoad();
         //jPanel1.setBackground(new Color(0,0,10,130));
     }
-
+    String FindMemberEmail(String name) {
+        try {
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                String Mname = rs.getString("memberName");
+                if (Mname.equals(name)) {
+                    return rs.getString("email");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
+    }
     public void tableLoad() {
         try {
             String sqlQuery = "SELECT * FROM `monthlypaymenttable`";
@@ -145,7 +160,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         cmb_yearmonth = new javax.swing.JComboBox();
         cmbox_name = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lbl_additional = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -296,10 +311,10 @@ public class adminDashBoard extends javax.swing.JFrame {
         jPanel1.add(jLabel14);
         jLabel14.setBounds(30, 210, 130, 40);
 
-        jLabel3.setForeground(new java.awt.Color(0, 153, 51));
-        jLabel3.setText("0");
-        jPanel1.add(jLabel3);
-        jLabel3.setBounds(160, 150, 120, 40);
+        lbl_additional.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_additional.setText("0");
+        jPanel1.add(lbl_additional);
+        lbl_additional.setBounds(160, 150, 120, 40);
 
         jButton1.setText("Calculate Total");
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255)));
@@ -396,7 +411,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         String MemberName = cmbox_name.getSelectedItem().toString();
         String Date = getCurrentDate();
         String PaidAmount = lbl_tot.getText();
-        String ToPayAmount = jLabel3.getText();
+        String ToPayAmount = lbl_additional.getText();
         try {
             String CurrentStatusQuary = "INSERT INTO `monthlypaymenttable`(`MemberId`, `MemberName`, `Date`, `PaidAmount`, `ToPay`) VALUES ('" + MemberId + "','" + MemberName + "','" + Date + "','" + PaidAmount + "','" + ToPayAmount + "')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
@@ -417,9 +432,21 @@ public class adminDashBoard extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        String totAditional = lbl_additional.getText();
+        String totOtSal = lbl_totOt.getText();
+        String totNetSal = lbl_netSal.getText();
+        String totOtHrs = lbl_OtHours.getText();
+        String totNormalHrs = lbl_totNormalHours.getText();
         String totSal = lbl_tot.getText();
-        SendMail s1 = new SendMail("madsampath94@gmail.com","Salary Slip"+cmb_yearmonth.getSelectedItem().toString(),totSal+"\n"+totSal,"madsampath94@gmail.com","dsmax071");
-        
+        String mailString = 
+ "Payment Date           : "+getCurrentDate()+"\n"+
+ "Total Working Hours  : "+totNormalHrs+"\n"+
+ "Total OT Hours         : "+totOtHrs+"\n"+
+ "Net Salary               : "+totNetSal+"\n"+
+ "OT Salary                : "+totOtSal+"\n"+
+ "Total Salary        : "+totSal+"\n";
+        SendMail s1 = new SendMail(FindMemberEmail(cmbox_name.getSelectedItem().toString()),"Salary Slip"+cmb_yearmonth.getSelectedItem().toString(),mailString,"madsampath94@gmail.com","dsmax071");
+      
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -477,7 +504,6 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
@@ -486,6 +512,7 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_OtHours;
+    private javax.swing.JLabel lbl_additional;
     private javax.swing.JLabel lbl_netSal;
     private javax.swing.JLabel lbl_tot;
     private javax.swing.JLabel lbl_totNormalHours;
