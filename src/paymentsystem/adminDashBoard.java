@@ -163,9 +163,12 @@ public class adminDashBoard extends javax.swing.JFrame {
         lbl_additional = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(800, 700));
         setMinimumSize(new java.awt.Dimension(800, 700));
         setResizable(false);
         getContentPane().setLayout(null);
@@ -327,14 +330,22 @@ public class adminDashBoard extends javax.swing.JFrame {
         jPanel1.add(jButton1);
         jButton1.setBounds(560, 180, 100, 40);
 
-        jButton2.setText("jButton2");
+        jButton2.setText("E");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(330, 180, 73, 23);
+        jButton2.setBounds(480, 180, 60, 40);
+
+        jButton3.setText("D");
+        jPanel1.add(jButton3);
+        jButton3.setBounds(310, 180, 60, 40);
+
+        jButton4.setText("U");
+        jPanel1.add(jButton4);
+        jButton4.setBounds(230, 180, 60, 40);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(40, 390, 720, 250);
@@ -497,6 +508,8 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbox_name;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
