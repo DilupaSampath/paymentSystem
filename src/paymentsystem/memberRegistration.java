@@ -66,7 +66,6 @@ public class memberRegistration extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txt_ContactNumber = new javax.swing.JTextField();
         txt_MemberID = new javax.swing.JTextField();
-        dc_JoningDate = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -79,6 +78,7 @@ public class memberRegistration extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        dc_JoningDate = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -150,10 +150,6 @@ public class memberRegistration extends javax.swing.JFrame {
         jPanel1.add(txt_MemberID);
         txt_MemberID.setBounds(140, 20, 310, 26);
 
-        dc_JoningDate.setDateFormatString("yyyy-MM-dd");
-        jPanel1.add(dc_JoningDate);
-        dc_JoningDate.setBounds(140, 100, 310, 26);
-
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rset-01-128.png"))); // NOI18N
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(jButton1);
@@ -210,6 +206,8 @@ public class memberRegistration extends javax.swing.JFrame {
         jLabel10.setText("Per OT Hour");
         jPanel1.add(jLabel10);
         jLabel10.setBounds(20, 220, 110, 30);
+        jPanel1.add(dc_JoningDate);
+        dc_JoningDate.setBounds(140, 100, 310, 26);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(90, 90, 590, 320);
