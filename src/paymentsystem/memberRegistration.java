@@ -14,11 +14,14 @@ import dbConnect.DB_connect;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -38,8 +41,35 @@ public class memberRegistration extends javax.swing.JFrame {
         initComponents();
         conn = DB_connect.connect();
         showUser();
+        loadNameCombo();
+        tableLoad();
+    }
+        public void tableLoad() {
+        try {
+            String sqlQuery = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sqlQuery);
+            rs = pst.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
+    void loadNameCombo() {
+        try {
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+
+            while (rs.next()) {
+                String name = rs.getString("memberName");
+                cmb_memberSearch.addItem(name);
+                //cmb_memberName.addItem(name);
+            }
+        } catch (Exception e) {
+        }
+
+    }
     public void showUser(){
     User currentUser = new User();
     String cUser = currentUser.getUserName();
@@ -59,7 +89,8 @@ public class memberRegistration extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cmb_memberSearch = new javax.swing.JComboBox();
+        jButton5 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lbl_MemberID = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -70,15 +101,11 @@ public class memberRegistration extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         txt_MemberName = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         dc_JoningDate = new com.toedter.calendar.JDateChooser();
+        jLabel9 = new javax.swing.JLabel();
+        txt_email = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -101,6 +128,11 @@ public class memberRegistration extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel2.add(jScrollPane1);
@@ -112,9 +144,22 @@ public class memberRegistration extends javax.swing.JFrame {
         jPanel2.add(jLabel3);
         jLabel3.setBounds(70, 10, 60, 30);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member ID", "Member Name" }));
-        jPanel2.add(jComboBox1);
-        jComboBox1.setBounds(130, 10, 140, 26);
+        cmb_memberSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member Name" }));
+        cmb_memberSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_memberSearchActionPerformed(evt);
+            }
+        });
+        jPanel2.add(cmb_memberSearch);
+        cmb_memberSearch.setBounds(130, 10, 140, 26);
+
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton5);
+        jButton5.setBounds(330, 10, 40, 30);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(90, 430, 590, 230);
@@ -126,21 +171,21 @@ public class memberRegistration extends javax.swing.JFrame {
         lbl_MemberID.setForeground(new java.awt.Color(153, 255, 255));
         lbl_MemberID.setText("Member ID");
         jPanel1.add(lbl_MemberID);
-        lbl_MemberID.setBounds(20, 20, 80, 30);
+        lbl_MemberID.setBounds(50, 40, 80, 30);
 
         jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(153, 255, 255));
         jLabel5.setText("Member Name");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(20, 60, 100, 30);
+        jLabel5.setBounds(50, 80, 100, 30);
 
         jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(153, 255, 255));
         jLabel6.setText("Joining Date");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(20, 100, 100, 30);
+        jLabel6.setBounds(50, 120, 100, 30);
         jPanel1.add(txt_ContactNumber);
-        txt_ContactNumber.setBounds(140, 140, 310, 26);
+        txt_ContactNumber.setBounds(170, 160, 310, 26);
 
         txt_MemberID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,12 +193,12 @@ public class memberRegistration extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txt_MemberID);
-        txt_MemberID.setBounds(140, 20, 310, 26);
+        txt_MemberID.setBounds(170, 40, 310, 26);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rset-01-128.png"))); // NOI18N
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(jButton1);
-        jButton1.setBounds(500, 240, 42, 42);
+        jButton1.setBounds(440, 250, 42, 42);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Button-Add-icon.png"))); // NOI18N
         jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -163,54 +208,50 @@ public class memberRegistration extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(500, 30, 42, 42);
+        jButton2.setBounds(170, 250, 42, 42);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/update128.png"))); // NOI18N
         jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
-        jButton3.setBounds(500, 100, 42, 42);
+        jButton3.setBounds(260, 250, 42, 42);
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete128.png"))); // NOI18N
         jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton4);
-        jButton4.setBounds(500, 170, 42, 42);
-
-        jLabel4.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel4.setText("Fixed Hours");
-        jPanel1.add(jLabel4);
-        jLabel4.setBounds(20, 260, 110, 30);
+        jButton4.setBounds(350, 250, 42, 42);
         jPanel1.add(txt_MemberName);
-        txt_MemberName.setBounds(140, 60, 310, 26);
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(140, 260, 310, 26);
-        jPanel1.add(jTextField2);
-        jTextField2.setBounds(140, 180, 310, 26);
-        jPanel1.add(jTextField3);
-        jTextField3.setBounds(140, 220, 310, 26);
+        txt_MemberName.setBounds(170, 80, 310, 26);
 
         jLabel8.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel8.setText("Contact Number");
+        jLabel8.setText("E Mail");
         jPanel1.add(jLabel8);
-        jLabel8.setBounds(20, 140, 110, 30);
+        jLabel8.setBounds(50, 200, 110, 40);
+
+        dc_JoningDate.setDateFormatString("yyyy-MM-dd");
+        jPanel1.add(dc_JoningDate);
+        dc_JoningDate.setBounds(170, 120, 310, 26);
 
         jLabel9.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel9.setText("Per Normal Hour");
+        jLabel9.setText("Contact Number");
         jPanel1.add(jLabel9);
-        jLabel9.setBounds(20, 180, 110, 30);
-
-        jLabel10.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel10.setText("Per OT Hour");
-        jPanel1.add(jLabel10);
-        jLabel10.setBounds(20, 220, 110, 30);
-        jPanel1.add(dc_JoningDate);
-        dc_JoningDate.setBounds(140, 100, 310, 26);
+        jLabel9.setBounds(50, 160, 110, 30);
+        jPanel1.add(txt_email);
+        txt_email.setBounds(170, 210, 310, 26);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(90, 90, 590, 320);
+        jPanel1.setBounds(90, 90, 590, 310);
         jPanel1.setBackground(new Color(0,0,10,130));
 
         jLabel2.setFont(new java.awt.Font("Constantia", 3, 48)); // NOI18N
@@ -236,15 +277,17 @@ public class memberRegistration extends javax.swing.JFrame {
         String memberName = txt_MemberName.getText();
         //  String joinDate = dc_JoningDate.getText();
         Calendar calendar = Calendar.getInstance();
-
+        String email = txt_email.getText();
         java.sql.Date joinDateObject = new java.sql.Date(dc_JoningDate.getDate().getTime());
         String contactNumber = txt_ContactNumber.getText();
         System.out.println("Date : " + joinDateObject);
         try {
-            String NewMemberInsertQuary = "INSERT INTO `memberdetails`(`memberId`, `memberName`, `joinDate`, `contactNumber`) VALUES ('" + memberID + "','" + memberName + "','" + joinDateObject + "','" + contactNumber + "')";
+            String NewMemberInsertQuary = "INSERT INTO `memberdetails`(`memberId`, `memberName`, `joinDate`, `contactNumber`,`email`) VALUES ('" + memberID + "','" + memberName + "','" + joinDateObject + "','" + contactNumber + "','"+email+"')";
             pst = conn.prepareStatement(NewMemberInsertQuary);
             //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
             pst.execute();   //System.out.println(getgender());
+            loadNameCombo() ;
+            tableLoad();
             JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
         } catch (Exception e) {
             System.out.println(e);
@@ -256,6 +299,91 @@ public class memberRegistration extends javax.swing.JFrame {
     private void txt_MemberIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MemberIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_MemberIDActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         String memberID = txt_MemberID.getText();
+          String memberName = txt_MemberName.getText();
+           java.sql.Date joinDateObject = new java.sql.Date(dc_JoningDate.getDate().getTime());
+            String ContactNumber = txt_ContactNumber.getText();
+            String email = txt_email.getText();
+            
+             
+                 try {
+            String searchQuary = "UPDATE `memberdetails` SET `memberId`='"+memberID+"',`memberName`='"+memberName+"',`joinDate`='"+joinDateObject+"',`contactNumber`='"+ContactNumber+"',`email`='"+email+"' WHERE `memberId`='"+memberID+"'";
+            pst = conn.prepareStatement(searchQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,memberName+"'s"+ " record updated successfully");
+            tableLoad();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+           int selectedRowIndex = jTable1.getSelectedRow();
+            txt_MemberID.setText(model.getValueAt(selectedRowIndex, 0).toString());
+            txt_MemberName.setText(model.getValueAt(selectedRowIndex, 1).toString());
+            
+            java.util.Date date;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(model.getValueAt(selectedRowIndex, 2).toString());
+             dc_JoningDate.setDate(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(memberRegistration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+            
+           
+            txt_ContactNumber.setText(model.getValueAt(selectedRowIndex, 3).toString());
+            txt_email.setText(model.getValueAt(selectedRowIndex, 4).toString());
+           
+        
+            
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+            String memberID = txt_MemberID.getText();
+            String memberName = txt_MemberName.getText();
+                 try {
+            String deleteQuary = "DELETE FROM `memberdetails` WHERE `memberId`='"+memberID+"'";
+             pst = conn.prepareStatement(deleteQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,memberName+"'s"+ " record deleted successfully");
+            tableLoad();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void cmb_memberSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_memberSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_memberSearchActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+     
+        String name= cmb_memberSearch.getSelectedItem().toString();
+             try {
+            String searchQuary = "SELECT * FROM `memberdetails` WHERE `memberName` ='"+name+"'";
+            pst = conn.prepareStatement(searchQuary);
+            rs = pst.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,17 +425,16 @@ public class memberRegistration extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cmb_memberSearch;
     private com.toedter.calendar.JDateChooser dc_JoningDate;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
@@ -316,13 +443,11 @@ public class memberRegistration extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lbl_MemberID;
     private javax.swing.JLabel lbl_username;
     private javax.swing.JTextField txt_ContactNumber;
     private javax.swing.JTextField txt_MemberID;
     private javax.swing.JTextField txt_MemberName;
+    private javax.swing.JTextField txt_email;
     // End of variables declaration//GEN-END:variables
 }
