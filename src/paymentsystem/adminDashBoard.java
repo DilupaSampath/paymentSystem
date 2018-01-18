@@ -427,7 +427,7 @@ public class adminDashBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_start1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_start1ActionPerformed
-        // TODO add your handling code here:
+       
         String MemberId = FindMemberId(cmbox_name.getSelectedItem().toString());
         String MemberName = cmbox_name.getSelectedItem().toString();
         String Date = getCurrentDate();

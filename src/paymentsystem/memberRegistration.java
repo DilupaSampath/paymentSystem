@@ -462,7 +462,7 @@ public class memberRegistration extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void cmb_memberSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_memberSearchActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_cmb_memberSearchActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

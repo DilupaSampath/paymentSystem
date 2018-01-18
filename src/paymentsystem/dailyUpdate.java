@@ -636,7 +636,7 @@ public class dailyUpdate extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println(CurrentTime());
        
-       //System.out.println(getDailyOutHours("Sampath") / 3600 + " -> Out hours");
+      
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
         
         

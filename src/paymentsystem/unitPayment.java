@@ -19,10 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
-/**
- *
- * @author User
- */
+
 public class unitPayment extends javax.swing.JFrame {
 
     Connection conn = null;

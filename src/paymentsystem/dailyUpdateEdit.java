@@ -62,7 +62,7 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
     }
     
        void loadDateCombo() {
-        Calendar now = Calendar.getInstance();   // Gets the current date and time
+        Calendar now = Calendar.getInstance();   
         int year = now.get(Calendar.YEAR);
         cmb_yearmonth.addItem(year + "-01");
         cmb_yearmonth.addItem(year + "-02");
