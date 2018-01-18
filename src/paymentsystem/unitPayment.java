@@ -11,9 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -24,7 +27,7 @@ public class unitPayment extends javax.swing.JFrame {
 
     Connection conn = null;
     PreparedStatement pst = null;
-    ResultSet rst = null;
+    ResultSet rs = null;
     
     /**
      * Creates new form unitPayment
@@ -33,14 +36,29 @@ public class unitPayment extends javax.swing.JFrame {
         initComponents();
         conn = DB_connect.connect();
         tableLoad();
+        loadNameCombo();
     }
+ void loadNameCombo() {
+        try {
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
 
+            while (rs.next()) {
+                String name = rs.getString("memberName");
+                cmb_memberName.addItem(name);
+                //cmb_memberName.addItem(name);
+            }
+        } catch (Exception e) {
+        }
+
+    }
     public void tableLoad(){
         try {
             String sqlQuery = "SELECT * FROM `unitpayment`";
             pst = conn.prepareStatement(sqlQuery);
-            rst = pst.executeQuery();
-            jTable1.setModel(DbUtils.resultSetToTableModel(rst));
+            rs = pst.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -57,6 +75,9 @@ public class unitPayment extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        cmb_memberName = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -69,6 +90,11 @@ public class unitPayment extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         btn_add = new javax.swing.JButton();
         dc_ChangedDate = new com.toedter.calendar.JDateChooser();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        dt_fixedHours = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -91,10 +117,35 @@ public class unitPayment extends javax.swing.JFrame {
                 "ID", "Name", "No of hours", "Rate per hour", "Date"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(30, 20, 510, 190);
+        jScrollPane1.setBounds(30, 50, 510, 170);
+
+        cmb_memberName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_memberNameActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmb_memberName);
+        cmb_memberName.setBounds(120, 10, 130, 26);
+
+        jLabel3.setText("Search");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(80, 10, 60, 20);
+
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2);
+        jButton2.setBounds(340, 10, 50, 30);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(120, 430, 570, 230);
@@ -143,9 +194,9 @@ public class unitPayment extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel11.setText("Date");
+        jLabel11.setText("Fixed Hours");
         jPanel2.add(jLabel11);
-        jLabel11.setBounds(30, 220, 78, 17);
+        jLabel11.setBounds(30, 230, 100, 17);
 
         btn_add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Button-Add-icon.png"))); // NOI18N
         btn_add.addActionListener(new java.awt.event.ActionListener() {
@@ -154,14 +205,47 @@ public class unitPayment extends javax.swing.JFrame {
             }
         });
         jPanel2.add(btn_add);
-        btn_add.setBounds(220, 260, 42, 42);
+        btn_add.setBounds(490, 20, 42, 42);
 
         dc_ChangedDate.setDateFormatString("yyyy-MM-dd");
         jPanel2.add(dc_ChangedDate);
-        dc_ChangedDate.setBounds(170, 210, 290, 26);
+        dc_ChangedDate.setBounds(170, 270, 290, 26);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/update128.png"))); // NOI18N
+        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton3);
+        jButton3.setBounds(490, 80, 42, 42);
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete128.png"))); // NOI18N
+        jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton4);
+        jButton4.setBounds(490, 140, 42, 42);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rset-01-128.png"))); // NOI18N
+        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.add(jButton1);
+        jButton1.setBounds(490, 200, 42, 42);
+
+        jLabel12.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(153, 255, 255));
+        jLabel12.setText("Date");
+        jPanel2.add(jLabel12);
+        jLabel12.setBounds(30, 280, 78, 17);
+        jPanel2.add(dt_fixedHours);
+        dt_fixedHours.setBounds(170, 230, 290, 26);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(120, 80, 570, 320);
+        jPanel2.setBounds(120, 80, 570, 330);
         jPanel2.setBackground(new Color(0,0,10,130));
 
         jLabel2.setFont(new java.awt.Font("Constantia", 3, 48)); // NOI18N
@@ -181,18 +265,20 @@ public class unitPayment extends javax.swing.JFrame {
         // TODO add your handling code here:
         String id = txt_memid.getText();
         String name = txt_memname.getText();
+        String fixedHours = dt_fixedHours.getText();
         double normalHour = Double.parseDouble(txt_NormalHour.getText());
         double OtHour = Double.parseDouble(txt_OtHour.getText());
         java.sql.Date date = new java.sql.Date(dc_ChangedDate.getDate().getTime());
         
         try{
-        String paymentUnit = "INSERT INTO `unitpayment`(`MemberID`, `MemberName`,`date`,`ratePerOtHour`,`ratePerNormalHour`) "
-                + "VALUES ('"+id+"','"+name+"','"+date+"','"+normalHour+"','"+OtHour+"')";
+        String paymentUnit = "INSERT INTO `unitpayment`(`MemberID`, `MemberName`,`date`,`ratePerOtHour`,`ratePerNormalHour`,`FixedHours`) "
+                + "VALUES ('"+id+"','"+name+"','"+date+"','"+normalHour+"','"+OtHour+"','"+fixedHours+"')";
                       
         pst = conn.prepareStatement(paymentUnit);
         pst.execute();
         JOptionPane.showMessageDialog(null," New Member Added Successfully.......!!!");
         tableLoad();
+        loadNameCombo();
         } catch (Exception e) {
             System.out.println(e);
         }           
@@ -201,6 +287,95 @@ public class unitPayment extends javax.swing.JFrame {
     private void txt_memidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_memidActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_memidActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String memberID = txt_memid.getText();
+        String memberName = txt_memname.getText();
+        String mnormalHour = txt_NormalHour.getText();
+        String OtHoure = txt_OtHour.getText();    
+        java.sql.Date ChangedDate = new java.sql.Date(dc_ChangedDate.getDate().getTime());
+       String fixedHours = dt_fixedHours.getText();
+
+        try {
+            String searchQuary = "UPDATE `unitpayment` SET `MemberID`='"+memberID+"',`MemberName`='"+memberName+"',`date`='"+ChangedDate+"',`ratePerNormalHour`='"+mnormalHour+"',`ratePerOtHour`='"+OtHoure+"',`FixedHours`= '"+fixedHours+"'WHERE `MemberID`='"+memberID+"' ";
+            pst = conn.prepareStatement(searchQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,memberName+"'s"+ " record updated successfully");
+            tableLoad();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+
+        String memberID = txt_memid.getText();
+        String memberName = txt_memname.getText();
+        try {
+            String deleteQuary = "DELETE FROM `memberdetails` WHERE `memberId`='"+memberID+"'";
+            pst = conn.prepareStatement(deleteQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,memberName+"'s"+ " record deleted successfully");
+            tableLoad();
+            loadNameCombo();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void cmb_memberNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_memberNameActionPerformed
+        // TODO add your handling code here:
+        /*
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        String SearchItem = cmb_memberName.getSelectedItem().toString();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
+        jTable1.setRowSorter(tr);
+        */
+
+    }//GEN-LAST:event_cmb_memberNameActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         String name= cmb_memberName.getSelectedItem().toString();
+             try {
+            String searchQuary = "SELECT * FROM `unitpayment` WHERE `memberName` ='"+name+"'";
+            pst = conn.prepareStatement(searchQuary);
+            rs = pst.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+           int selectedRowIndex = jTable1.getSelectedRow();
+            txt_memid.setText(model.getValueAt(selectedRowIndex, 0).toString());
+            txt_memname.setText(model.getValueAt(selectedRowIndex, 1).toString());
+            
+            java.util.Date date;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(model.getValueAt(selectedRowIndex, 2).toString());
+             dc_ChangedDate.setDate(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(memberRegistration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+            
+           
+            txt_NormalHour.setText(model.getValueAt(selectedRowIndex, 3).toString());
+            txt_OtHour.setText(model.getValueAt(selectedRowIndex, 4).toString());
+            dt_fixedHours.setText(model.getValueAt(selectedRowIndex, 5).toString());
+           
+        
+        
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -243,11 +418,19 @@ public class unitPayment extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JComboBox cmb_memberName;
     private com.toedter.calendar.JDateChooser dc_ChangedDate;
+    private javax.swing.JTextField dt_fixedHours;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

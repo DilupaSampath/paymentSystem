@@ -358,6 +358,7 @@ public class memberRegistration extends javax.swing.JFrame {
             pst.execute();
             JOptionPane.showMessageDialog(null,memberName+"'s"+ " record deleted successfully");
             tableLoad();
+            loadNameCombo();
         } catch (Exception e) {
             System.out.println(e);
         }

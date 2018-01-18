@@ -192,6 +192,11 @@ public class adminDashBoard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        paidAmountTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                paidAmountTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(paidAmountTable);
 
         jPanel2.add(jScrollPane1);
@@ -344,6 +349,11 @@ public class adminDashBoard extends javax.swing.JFrame {
         jButton3.setBounds(310, 180, 60, 40);
 
         jButton4.setText("U");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton4);
         jButton4.setBounds(230, 180, 60, 40);
 
@@ -459,6 +469,14 @@ public class adminDashBoard extends javax.swing.JFrame {
         SendMail s1 = new SendMail(FindMemberEmail(cmbox_name.getSelectedItem().toString()),"Salary Slip"+cmb_yearmonth.getSelectedItem().toString(),mailString,"madsampath94@gmail.com","dsmax071");
       
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void paidAmountTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paidAmountTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_paidAmountTableMouseClicked
 
     /**
      * @param args the command line arguments

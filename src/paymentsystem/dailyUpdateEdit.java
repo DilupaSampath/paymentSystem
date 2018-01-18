@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
@@ -38,6 +39,8 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
         conn = DB_connect.connect();
         tableLoad();
         txt_AutoId.setEnabled(false);
+        txt_Mid.setEnabled(false);
+        txt_Mname.setEnabled(false);
         loadDateCombo();
         loadNameCombo() ;
         seticon();
@@ -174,7 +177,7 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(51, 255, 255));
         jLabel4.setText("Member Name");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(10, 390, 80, 14);
+        jLabel4.setBounds(10, 390, 90, 14);
         jPanel1.add(txt_Mdate);
         txt_Mdate.setBounds(100, 430, 130, 26);
 
@@ -237,8 +240,13 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
         cmb_yearmonth.setBounds(270, 10, 160, 26);
 
         jButton3.setText("U");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
-        jButton3.setBounds(573, 330, 60, 40);
+        jButton3.setBounds(570, 330, 60, 40);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(60, 80, 680, 500);
@@ -298,6 +306,28 @@ public class dailyUpdateEdit extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String autoID = txt_AutoId.getText();
+         String memberID = txt_Mid.getText();
+          String memberName = txt_Mname.getText();
+           String time = txt_Time.getText();
+            String date = txt_Mdate.getText();
+             String status = cmb_Status.getSelectedItem().toString();
+             
+                 try {
+            String searchQuary = "UPDATE `dailystatus` SET `MemberId`='"+memberID+"',`MemberName`='"+memberName+"',`Date`='"+date+"',`Time`='"+time+"',`Status`='"+status+"'  WHERE `AutoID`='"+autoID+"'";
+            pst = conn.prepareStatement(searchQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,date+" "+memberName+"'s"+ "record updated successfully");
+            tableLoad();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

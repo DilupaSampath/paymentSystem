@@ -409,7 +409,7 @@ public class dailyUpdate extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(160, 210, 73, 23);
+        jButton1.setBounds(150, 210, 73, 23);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(150, 90, 540, 250);
@@ -434,7 +434,7 @@ public class dailyUpdate extends javax.swing.JFrame {
         String memberName = cmbx_currentMembers.getSelectedItem().toString();
 
         try {
-            //String CurrentStatusQuary = "INSERT INTO `currentstatus`(`memberName`, `CurrentStatus`) VALUES ('"+memberName+"','OnTime')";
+           // String OnTimeQuary = "INSERT INTO `currentstatus`(`memberName`, `CurrentStatus`) VALUES ('"+memberName+"','OnTime')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
             String CurrentStatusQuary = "UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '" + memberName + "'";
             pst = conn.prepareStatement(CurrentStatusQuary);
