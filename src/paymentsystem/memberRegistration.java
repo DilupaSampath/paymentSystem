@@ -28,12 +28,12 @@ import net.proteanit.sql.DbUtils;
  * @author HP1
  */
 public class memberRegistration extends javax.swing.JFrame {
-
+     String OldDmemberName = null;
     Connection conn = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
     java.sql.Date sqldate;
-
+   
     /**
      * Creates new form memberRegistration
      */
@@ -44,6 +44,78 @@ public class memberRegistration extends javax.swing.JFrame {
         loadNameCombo();
         tableLoad();
     }
+    
+        void DeleteMemberFromStatusTable(String memberName){
+    
+       try {
+            String addNewMemberToStatusTablequary = "DELETE FROM `currentstatus` WHERE `MemberName`='"+memberName+"'";
+            pst = conn.prepareStatement(addNewMemberToStatusTablequary);
+            //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
+            pst.execute();   //System.out.println(getgender());
+            //loadNameCombo() ;
+           // tableLoad();
+           // JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    
+    
+    }
+    
+    
+    void addNewMemberToStatusTable(String memberName,String Mstatus){
+    
+       try {
+            String addNewMemberToStatusTablequary = "INSERT INTO `currentstatus` (`MemberName`, `currentstatus`) VALUES ('" + memberName + "','"+Mstatus+"')";
+            pst = conn.prepareStatement(addNewMemberToStatusTablequary);
+            //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
+            pst.execute();   //System.out.println(getgender());
+            //loadNameCombo() ;
+           // tableLoad();
+           // JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    
+    
+    }
+    
+      void UpdateNewMemberInStatusTable(String NewmemberName,String OldmemberName){
+    
+       try {
+            String addNewMemberToStatusTablequary = "UPDATE `currentstatus` SET `MemberName`='"+NewmemberName+"' WHERE `MemberName`='"+OldmemberName+"' ";
+            pst = conn.prepareStatement(addNewMemberToStatusTablequary);
+            //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
+            pst.execute();   //System.out.println(getgender());
+            //loadNameCombo() ;
+           // tableLoad();
+           // JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    
+    
+    }
+    
+    
+      String FindMemberExsist(String ID) {
+        try {
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                String Mid = rs.getString("memberId");
+                if (ID.equals(Mid)) {
+                    return rs.getString("memberId");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        return null;
+    }
+      
+      
         public void tableLoad() {
         try {
             String sqlQuery = "SELECT * FROM `memberdetails`";
@@ -74,7 +146,7 @@ public class memberRegistration extends javax.swing.JFrame {
     User currentUser = new User();
     String cUser = currentUser.getUserName();
     lbl_username.setText(cUser);
-    
+         
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -197,6 +269,11 @@ public class memberRegistration extends javax.swing.JFrame {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rset-01-128.png"))); // NOI18N
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1);
         jButton1.setBounds(440, 250, 42, 42);
 
@@ -273,6 +350,7 @@ public class memberRegistration extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+      
         String memberID = txt_MemberID.getText();
         String memberName = txt_MemberName.getText();
         //  String joinDate = dc_JoningDate.getText();
@@ -281,6 +359,10 @@ public class memberRegistration extends javax.swing.JFrame {
         java.sql.Date joinDateObject = new java.sql.Date(dc_JoningDate.getDate().getTime());
         String contactNumber = txt_ContactNumber.getText();
         System.out.println("Date : " + joinDateObject);
+
+        if(FindMemberExsist(memberID) == null)
+        {
+        
         try {
             String NewMemberInsertQuary = "INSERT INTO `memberdetails`(`memberId`, `memberName`, `joinDate`, `contactNumber`,`email`) VALUES ('" + memberID + "','" + memberName + "','" + joinDateObject + "','" + contactNumber + "','"+email+"')";
             pst = conn.prepareStatement(NewMemberInsertQuary);
@@ -288,9 +370,16 @@ public class memberRegistration extends javax.swing.JFrame {
             pst.execute();   //System.out.println(getgender());
             loadNameCombo() ;
             tableLoad();
+            addNewMemberToStatusTable(memberName,"newMember");
             JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
         } catch (Exception e) {
             System.out.println(e);
+        }
+        }
+        else
+        {
+          JOptionPane.showMessageDialog(null, "Member ID already exsist", "Error", JOptionPane.ERROR_MESSAGE);
+        
         }
 
 
@@ -304,6 +393,7 @@ public class memberRegistration extends javax.swing.JFrame {
         // TODO add your handling code here:
          String memberID = txt_MemberID.getText();
           String memberName = txt_MemberName.getText();
+       
            java.sql.Date joinDateObject = new java.sql.Date(dc_JoningDate.getDate().getTime());
             String ContactNumber = txt_ContactNumber.getText();
             String email = txt_email.getText();
@@ -315,6 +405,7 @@ public class memberRegistration extends javax.swing.JFrame {
             pst.execute();
             JOptionPane.showMessageDialog(null,memberName+"'s"+ " record updated successfully");
             tableLoad();
+            UpdateNewMemberInStatusTable(memberName,OldDmemberName);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -324,6 +415,8 @@ public class memberRegistration extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
+       
+        //    txt_MemberID.setEnabled(false);
              DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
            int selectedRowIndex = jTable1.getSelectedRow();
             txt_MemberID.setText(model.getValueAt(selectedRowIndex, 0).toString());
@@ -341,7 +434,7 @@ public class memberRegistration extends javax.swing.JFrame {
            
             txt_ContactNumber.setText(model.getValueAt(selectedRowIndex, 3).toString());
             txt_email.setText(model.getValueAt(selectedRowIndex, 4).toString());
-           
+            OldDmemberName = model.getValueAt(selectedRowIndex, 1).toString();
         
             
         
@@ -359,6 +452,7 @@ public class memberRegistration extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,memberName+"'s"+ " record deleted successfully");
             tableLoad();
             loadNameCombo();
+            DeleteMemberFromStatusTable(memberName);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -385,6 +479,12 @@ public class memberRegistration extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        tableLoad();
+        loadNameCombo();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -51,9 +52,25 @@ public class dailyUpdate extends javax.swing.JFrame {
         conn = DB_connect.connect();
         loadcombobox();
         tableLoad();
+        loadDateCombo();
+    }
+     void loadDateCombo() {
+        Calendar now = Calendar.getInstance();   // Gets the current date and time
+        int year = now.get(Calendar.YEAR);
+        cmb_yearmonth.addItem(year + "-01");
+        cmb_yearmonth.addItem(year + "-02");
+        cmb_yearmonth.addItem(year + "-03");
+        cmb_yearmonth.addItem(year + "-04");
+        cmb_yearmonth.addItem(year + "-05");
+        cmb_yearmonth.addItem(year + "-06");
+        cmb_yearmonth.addItem(year + "-07");
+        cmb_yearmonth.addItem(year + "-08");
+        cmb_yearmonth.addItem(year + "-09");
+        cmb_yearmonth.addItem(year + "-10");
+        cmb_yearmonth.addItem(year + "-11");
+        cmb_yearmonth.addItem(year + "-12");
 
     }
-
     String CurrentTime() {
 
         LocalDateTime LocalTime = LocalDateTime.now();
@@ -268,6 +285,7 @@ public class dailyUpdate extends javax.swing.JFrame {
 
                 String name = Mname;
                 cmbx_currentMembers.addItem(name);
+                cmb_searchDailyMembername.addItem(name);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -287,10 +305,10 @@ public class dailyUpdate extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        txt_Search = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        jButton2 = new javax.swing.JButton();
+        cmb_searchDailyMembername = new javax.swing.JComboBox();
+        cmb_yearmonth = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         btn_start = new javax.swing.JButton();
         btn_pause = new javax.swing.JButton();
@@ -329,23 +347,28 @@ public class dailyUpdate extends javax.swing.JFrame {
         jPanel2.add(jScrollPane1);
         jScrollPane1.setBounds(20, 100, 480, 160);
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(153, 255, 255));
-        jLabel3.setText("Search By");
-        jPanel2.add(jLabel3);
-        jLabel3.setBounds(290, 30, 60, 30);
-        jPanel2.add(txt_Search);
-        txt_Search.setBounds(70, 30, 160, 26);
-
         jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(153, 255, 255));
         jLabel7.setText("Search ");
         jPanel2.add(jLabel7);
         jLabel7.setBounds(20, 30, 50, 30);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member ID", "Member Name" }));
-        jPanel2.add(jComboBox2);
-        jComboBox2.setBounds(370, 30, 140, 26);
+        jButton2.setText("S");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2);
+        jButton2.setBounds(440, 30, 60, 30);
+
+        cmb_searchDailyMembername.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member Name" }));
+        jPanel2.add(cmb_searchDailyMembername);
+        cmb_searchDailyMembername.setBounds(80, 30, 140, 26);
+
+        cmb_yearmonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Date" }));
+        jPanel2.add(cmb_yearmonth);
+        cmb_yearmonth.setBounds(260, 30, 160, 26);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(150, 380, 540, 280);
@@ -424,7 +447,14 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
 
-        btn_pause.setVisible(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
+    int response = JOptionPane.showConfirmDialog(null, "Do you need to start the day ?", "Confirm",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.NO_OPTION) {
+      System.out.println("No button clicked");
+    } else if (response == JOptionPane.YES_OPTION) {
+      System.out.println("Yes button clicked");
+       btn_pause.setVisible(true);
         btn_Restart.setVisible(true);
         btn_start.setVisible(false);
         btn_stop.setVisible(true);
@@ -444,13 +474,27 @@ public class dailyUpdate extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
+    } else if (response == JOptionPane.CLOSED_OPTION) {
+      System.out.println("JOptionPane closed");
+    }
+    /*
+       
 
-
+*/
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
         // TODO add your handling code here:
-        btn_pause.setVisible(false);
+        
+        
+        JDialog.setDefaultLookAndFeelDecorated(true);
+    int response = JOptionPane.showConfirmDialog(null, "Do you need to go outdoor activity ?", "Confirm",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.NO_OPTION) {
+      System.out.println("No button clicked");
+    } else if (response == JOptionPane.YES_OPTION) {
+      System.out.println("Yes button clicked");
+      btn_pause.setVisible(false);
         btn_Restart.setVisible(true);
         btn_start.setVisible(false);
         btn_stop.setVisible(false);
@@ -466,12 +510,24 @@ public class dailyUpdate extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
+    } else if (response == JOptionPane.CLOSED_OPTION) {
+      System.out.println("JOptionPane closed");
+    }
+        
 
     }//GEN-LAST:event_btn_pauseActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
+
+        JDialog.setDefaultLookAndFeelDecorated(true);
+    int response = JOptionPane.showConfirmDialog(null, "Do you need to end the day ?", "Confirm",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.NO_OPTION) {
+      System.out.println("No button clicked");
+    } else if (response == JOptionPane.YES_OPTION) {
+      System.out.println("Yes button clicked");
       
-        btn_pause.setVisible(true);
+      btn_pause.setVisible(true);
         btn_Restart.setVisible(true);
         btn_start.setVisible(true);
         btn_stop.setVisible(true);
@@ -490,12 +546,28 @@ public class dailyUpdate extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
+    } else if (response == JOptionPane.CLOSED_OPTION) {
+      System.out.println("JOptionPane closed");
+    }
+        
+        
+        
 
     }//GEN-LAST:event_btn_stopActionPerformed
 
     private void btn_RestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RestartActionPerformed
         // TODO add your handling code here:
 
+        JDialog.setDefaultLookAndFeelDecorated(true);
+    int response = JOptionPane.showConfirmDialog(null, "Do you need to restart the work ?", "Confirm",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.NO_OPTION) {
+      System.out.println("No button clicked");
+    } else if (response == JOptionPane.YES_OPTION) {
+      System.out.println("Yes button clicked");
+      
+        
+        
         btn_pause.setVisible(true);
         btn_Restart.setVisible(false);
         btn_start.setVisible(true);
@@ -513,6 +585,9 @@ public class dailyUpdate extends javax.swing.JFrame {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    } else if (response == JOptionPane.CLOSED_OPTION) {
+      System.out.println("JOptionPane closed");
+    }
     }//GEN-LAST:event_btn_RestartActionPerformed
 
     private void cmbx_currentMembersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbx_currentMembersActionPerformed
@@ -572,6 +647,21 @@ public class dailyUpdate extends javax.swing.JFrame {
         System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String date= cmb_yearmonth.getSelectedItem().toString();
+        String name= cmb_searchDailyMembername.getSelectedItem().toString();
+        try {
+            String searchQuary = "SELECT * FROM `dailystatus` WHERE `MemberName` ='"+name+"' and `Date`  LIKE '" + date + "%'";
+            pst = conn.prepareStatement(searchQuary);
+            rs = pst.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -616,17 +706,17 @@ public class dailyUpdate extends javax.swing.JFrame {
     private javax.swing.JButton btn_pause;
     private javax.swing.JButton btn_start;
     private javax.swing.JButton btn_stop;
+    private javax.swing.JComboBox cmb_searchDailyMembername;
+    private javax.swing.JComboBox cmb_yearmonth;
     private javax.swing.JComboBox cmbx_currentMembers;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txt_Search;
     // End of variables declaration//GEN-END:variables
 }
