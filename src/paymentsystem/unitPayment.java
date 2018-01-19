@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import org.apache.commons.validator.EmailValidator;
 
 
 public class unitPayment extends javax.swing.JFrame {
@@ -35,6 +36,9 @@ public class unitPayment extends javax.swing.JFrame {
         tableLoad();
         loadNameCombo();
     }
+    
+
+    
  void loadNameCombo() {
         try {
             String sql = "SELECT * FROM `memberdetails`";

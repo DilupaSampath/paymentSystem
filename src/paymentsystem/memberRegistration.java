@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import org.apache.commons.validator.EmailValidator;
 
 /**
  *
@@ -44,6 +45,14 @@ public class memberRegistration extends javax.swing.JFrame {
         loadNameCombo();
         tableLoad();
     }
+    
+     boolean isValidEmail(String email)
+ {
+ 
+ //String email = "myName@example.com";
+boolean valid = EmailValidator.getInstance().isValid(email);
+ return valid;
+ }
     
         void DeleteMemberFromStatusTable(String memberName){
     
@@ -360,6 +369,8 @@ public class memberRegistration extends javax.swing.JFrame {
         String contactNumber = txt_ContactNumber.getText();
         System.out.println("Date : " + joinDateObject);
 
+        if(isValidEmail(email))
+        {
         if(FindMemberExsist(memberID) == null)
         {
         
@@ -381,7 +392,13 @@ public class memberRegistration extends javax.swing.JFrame {
           JOptionPane.showMessageDialog(null, "Member ID already exsist", "Error", JOptionPane.ERROR_MESSAGE);
         
         }
-
+        }
+        else
+        {
+        
+        JOptionPane.showMessageDialog(null, email+ " this E mail is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
