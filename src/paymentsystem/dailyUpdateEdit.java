@@ -5,7 +5,7 @@
  */
 package paymentsystem;
 
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
+//import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import dbConnect.DB_connect;
 import java.awt.Color;
 import java.awt.Toolkit;

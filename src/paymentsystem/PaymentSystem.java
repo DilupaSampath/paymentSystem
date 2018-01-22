@@ -19,37 +19,11 @@ public class PaymentSystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+
         
-
- try {
-            Class.forName("com.mysql.jdbc.Driver" );
-        } catch (ClassNotFoundException e) {
-            System.out.println("not JDBC driver detected..!!");
-            e.printStackTrace();
-            return;
-        }
-        System.out.println("JDBC driver detected OK");
-         Connection conn = null;
-         
-         try {
-                conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/supreme?","root", "");
-        } catch (SQLException e) {
-            System.out.println("Connection Fail.. check output consol..!");
-            e.printStackTrace(); 
-            return;
-            
-        }
-         
-         if(conn!=null){
-       System.out.println("Connection OK.. u made it");
-         }
-         else
-         {
-         System.out.println("not made it");
-         }
-       
-
-
+        HomePage h1 = new HomePage();
+        h1.setVisible(true);
 // TODO code application logic hereq
     }
     
