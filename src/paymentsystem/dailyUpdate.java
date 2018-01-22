@@ -56,6 +56,19 @@ public class dailyUpdate extends javax.swing.JFrame {
         loadDateCombo();
         jButton1.setVisible(false);
     }
+    Boolean checkCoboBoxEmptySelected()
+    {
+     String s = cmbx_currentMembers.getSelectedItem().toString();
+    if(s.equals("Member Name"))
+    {
+    return true;
+    }
+    else
+    {
+    return false;
+    }
+    
+    }
      void loadDateCombo() {
         Calendar now = Calendar.getInstance();   // Gets the current date and time
         int year = now.get(Calendar.YEAR);
@@ -380,14 +393,14 @@ public class dailyUpdate extends javax.swing.JFrame {
         jPanel2.add(jLabel7);
         jLabel7.setBounds(20, 30, 50, 30);
 
-        jButton2.setText("S");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search1.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
         jPanel2.add(jButton2);
-        jButton2.setBounds(440, 30, 60, 30);
+        jButton2.setBounds(440, 20, 40, 40);
 
         cmb_searchDailyMembername.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member Name" }));
         jPanel2.add(cmb_searchDailyMembername);
@@ -401,6 +414,8 @@ public class dailyUpdate extends javax.swing.JFrame {
         jPanel2.setBounds(150, 380, 540, 280);
         jPanel2.setBackground(new Color(0,0,10,130));
 
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setLayout(null);
 
         btn_start.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/OntimeButton.jpg"))); // NOI18N
@@ -474,6 +489,8 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
 
+        if(!(checkCoboBoxEmptySelected())){
+        
         JDialog.setDefaultLookAndFeelDecorated(true);
     int response = JOptionPane.showConfirmDialog(null, "Do you need to start the day ?", "Confirm",
         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -515,10 +532,13 @@ public class dailyUpdate extends javax.swing.JFrame {
     } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
     }
-    /*
-       
-
-*/
+        }
+        else
+        {
+        
+          JOptionPane.showMessageDialog(null, "Select Member Name First", "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
@@ -697,21 +717,6 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cmbx_currentMembersActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        System.out.println(CurrentTime());
-       
-      
-        String cmbName = cmbx_currentMembers.getSelectedItem().toString();
-        
-        
-        //Calendar now = Calendar.getInstance();   // Gets the current date and time
-       // int year = now.get(Calendar.YEAR); 
-       // System.out.println(year+" ->yrar");  
-      //  System.out.println(getFixedHours(cmbName)+" -> fixed hours");
-        System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String date= cmb_yearmonth.getSelectedItem().toString();
@@ -733,6 +738,19 @@ public class dailyUpdate extends javax.swing.JFrame {
         h1.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println(CurrentTime());
+
+        String cmbName = cmbx_currentMembers.getSelectedItem().toString();
+
+        //Calendar now = Calendar.getInstance();   // Gets the current date and time
+        // int year = now.get(Calendar.YEAR);
+        // System.out.println(year+" ->yrar");
+        //  System.out.println(getFixedHours(cmbName)+" -> fixed hours");
+        System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
