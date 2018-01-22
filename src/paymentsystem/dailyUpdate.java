@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,6 +54,7 @@ public class dailyUpdate extends javax.swing.JFrame {
         loadcombobox();
         tableLoad();
         loadDateCombo();
+        jButton1.setVisible(false);
     }
      void loadDateCombo() {
         Calendar now = Calendar.getInstance();   // Gets the current date and time
@@ -81,9 +83,9 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     void updateDailyStatusTable(String status) {
         String mId = FindMemberId(cmbx_currentMembers.getSelectedItem().toString());
-        String mDate = getCurrentDate();
+        String mDate ="2018-01-22";//getCurrentDate();
         String mName = cmbx_currentMembers.getSelectedItem().toString();
-        String mTime = CurrentTime();
+        String mTime ="22:45:00";//CurrentTime();
 
         try {
             String CurrentStatusQuary = "INSERT INTO `dailystatus`(`MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('" + mId + "','" + mName + "','" + mDate + "','" + mTime + "','" + status + "')";
@@ -99,11 +101,11 @@ public class dailyUpdate extends javax.swing.JFrame {
     }
 
     double getDailyOutHours(String name) {
-
+        int j = 0;
         String mId = FindMemberId(cmbx_currentMembers.getSelectedItem().toString());
-        String mDate = getCurrentDate();
+        String mDate =getCurrentDate();
         try {
-            String sql = "SELECT * FROM `dailystatus` where `MemberId`='" + mId + "' and `Date` = '" + mDate + "'  and `Status` ='PauseTime' or `status`='ResumeTime'  ORDER BY `Time` ASC ";
+            String sql = "SELECT * FROM `dailystatus` where `MemberId`='" + mId + "' and `Date` = '" + mDate + "'  and (`Status` ='PauseTime' or `status`='ResumeTime')  ORDER BY `Time` ASC ";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery(sql);
             double array[] = new double[10];
@@ -129,14 +131,19 @@ public class dailyUpdate extends javax.swing.JFrame {
                     int Rminutes = (RtotSecs % 3600) / 60;
                     int Rseconds = RtotSecs % 60;
                     array[index] = RtotSecs - PtotSecs;
+                    j++;
                     index++;
                 }
 
             }
-            for (int i = 0; i < array.length; i++) {
+            for (int  i = 0;i < j+1; i++) {
+                double u = array[i];
+                double u1 = array[i+1];
+                
                 resultNew = array[i] + resultNew;
 
             }
+            double p = resultNew;
             return resultNew;
 
         } catch (SQLException e) {
@@ -169,16 +176,25 @@ public class dailyUpdate extends javax.swing.JFrame {
     }
 
     void setHoursAndOtHoursToDatabase(String MemberId, String MemberName, String Date) {
-
-        int NormalHours = (int) ((FindFullHrs() / 3600) - (getDailyOutHours(MemberName) / 3600));
-        int OtHours = (int) (((FindFullHrs() / 3600) - (getDailyOutHours(MemberName) / 3600)) - getFixedHours(MemberName));
+        double w = Math.round(getDailyOutHours(MemberName) / 3600);
+        double o =getDailyOutHours(MemberName) / 3600.00;
+        int u = FindFullHrs();
+        double p = FindFullHrs() / 3600.00;
+        DecimalFormat f = new DecimalFormat("##.00");
+        String  i= f.format(FindFullHrs() / 3600.00);
+        
+        
+        String NormalHours =f.format(((FindFullHrs() / 3600.00) - (getDailyOutHours(MemberName) / 3600.00)));
+        String OtHours =f.format(((FindFullHrs() / 3600.00) -(getDailyOutHours(MemberName) / 3600.00))- getFixedHours(MemberName) );
+       //--change int NormalHours = (int) (Math.round((FindFullHrs() / 3600)) -Math.round((getDailyOutHours(MemberName) / 3600)));
+       //--change int OtHours = (int) ((Math.round((FindFullHrs() / 3600)) - Math.round(getDailyOutHours(MemberName) / 3600)) - getFixedHours(MemberName));
         try {
             String CurrentStatusQuary = "INSERT INTO `dailyhours`(`MemberId`, `MemberName`, `Date`, `NormalHours`, `OtHours`) VALUES ('" + MemberId + "','" + MemberName + "','" + Date + "','" + NormalHours + "','" + OtHours + "')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
 
             pst = conn.prepareStatement(CurrentStatusQuary);
-            pst.execute();   //System.out.println(getgender());
-            JOptionPane.showMessageDialog(null, "OK");
+            pst.execute();   //System.out.println(getgender());     
+           // JOptionPane.showMessageDialog(null, "OK");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -194,7 +210,7 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     int FindFullHrs() {
         String mId = FindMemberId(cmbx_currentMembers.getSelectedItem().toString());
-        String mDate = getCurrentDate();
+        String mDate =getCurrentDate();
         try {
             String sql = "SELECT * FROM `dailystatus` where `MemberId`='" + mId + "' and `Date` = '" + mDate + "'";
             pst = conn.prepareStatement(sql);
@@ -302,6 +318,7 @@ public class dailyUpdate extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -328,6 +345,16 @@ public class dailyUpdate extends javax.swing.JFrame {
         jLabel2.setText("Daily update form");
         getContentPane().add(jLabel2);
         jLabel2.setBounds(220, 20, 450, 50);
+
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home.png"))); // NOI18N
+        jButton6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255)));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(660, 20, 50, 50);
 
         jPanel2.setLayout(null);
 
@@ -461,9 +488,14 @@ public class dailyUpdate extends javax.swing.JFrame {
 
         
         
+        
+        
         String memberName = cmbx_currentMembers.getSelectedItem().toString();
-
+        String id = FindMemberId(memberName);
+        String date = getCurrentDate();
+        String time = CurrentTime();
         try {
+            String dailyUpdateQuary = "INSERT INTO `dailystatus`(`MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+time+"','OnTime')";
            // String OnTimeQuary = "INSERT INTO `currentstatus`(`memberName`, `CurrentStatus`) VALUES ('"+memberName+"','OnTime')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
             String CurrentStatusQuary = "UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '" + memberName + "'";
@@ -471,6 +503,12 @@ public class dailyUpdate extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
             pst.execute();   //System.out.println(getgender());
             JOptionPane.showMessageDialog(null, " good Morning  " + memberName + "");
+            pst=null;
+            conn.close();
+            conn = DB_connect.connect();
+            pst = conn.prepareStatement(dailyUpdateQuary);
+            pst.execute(); 
+             tableLoad();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -500,21 +538,29 @@ public class dailyUpdate extends javax.swing.JFrame {
         btn_stop.setVisible(false);
 
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
-        System.out.println(cmbName);
+        System.out.println(cmbName);        
+        String memberName = cmbx_currentMembers.getSelectedItem().toString();
+        String id = FindMemberId(memberName);
+        String date = getCurrentDate();
+        String time = CurrentTime();
 
+        
         try {
+            String dailyUpdateQuary = "INSERT INTO `dailystatus`(`MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+time+"','PauseTime')";
             String pause = "UPDATE `currentstatus` SET `CurrentStatus`='PauseTime' WHERE `MemberName` = '" + cmbName + "' ";
             pst = conn.prepareStatement(pause);
             pst.execute();
+            pst=null;
+            pst = conn.prepareStatement(dailyUpdateQuary);
+            pst.execute();
             JOptionPane.showMessageDialog(null, "You are taking a break " + cmbName);
+             tableLoad();
         } catch (SQLException ex) {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
     } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
     }
-        
-
     }//GEN-LAST:event_btn_pauseActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
@@ -541,8 +587,10 @@ public class dailyUpdate extends javax.swing.JFrame {
             pst = conn.prepareStatement(pause);
             pst.execute();
             JOptionPane.showMessageDialog(null, "You are off for the day " + cmbName);
-            setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), getCurrentDate());
+          //  setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), getCurrentDate());
+             setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), "2018-01-22");
             System.out.println("done 2nd quary");
+             tableLoad();
         } catch (SQLException ex) {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -576,11 +624,21 @@ public class dailyUpdate extends javax.swing.JFrame {
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
         System.out.println(cmbName);
 
+        String memberName = cmbx_currentMembers.getSelectedItem().toString();
+        String id = FindMemberId(memberName);
+        String date = getCurrentDate();
+        String time = CurrentTime();
+        
         try {
+            String dailyUpdateQuary = "INSERT INTO `dailystatus`( `MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+time+"','ResumeTime')";
             String pause = "UPDATE `currentstatus` SET `CurrentStatus`='ResumeTime' WHERE `MemberName` = '" + cmbName + "' ";
             pst = conn.prepareStatement(pause);
             pst.execute();
+            pst=null;
+            pst = conn.prepareStatement(dailyUpdateQuary);
+            pst.execute();
             JOptionPane.showMessageDialog(null, "You are resuming work " + cmbName);
+             tableLoad();
         } catch (SQLException ex) {
             Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -623,6 +681,13 @@ public class dailyUpdate extends javax.swing.JFrame {
                     btn_stop.setVisible(true);
                     btn_pause.setVisible(true);
                 }
+                else
+                {
+                 btn_start.setVisible(true);
+                 btn_Restart.setVisible(false);
+                 btn_stop.setVisible(true);
+                 btn_pause.setVisible(true);
+                }
                 status =null;
             }
 
@@ -661,6 +726,13 @@ public class dailyUpdate extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        HomePage h1 =new HomePage();
+        h1.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -711,6 +783,7 @@ public class dailyUpdate extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbx_currentMembers;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;

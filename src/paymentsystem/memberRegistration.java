@@ -187,6 +187,7 @@ boolean valid = EmailValidator.getInstance().isValid(email);
         dc_JoningDate = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         txt_email = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -339,6 +340,16 @@ boolean valid = EmailValidator.getInstance().isValid(email);
         getContentPane().add(jPanel1);
         jPanel1.setBounds(90, 90, 590, 310);
         jPanel1.setBackground(new Color(0,0,10,130));
+
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home.png"))); // NOI18N
+        jButton6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255)));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(720, 20, 50, 50);
 
         jLabel2.setFont(new java.awt.Font("Constantia", 3, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
@@ -503,6 +514,13 @@ boolean valid = EmailValidator.getInstance().isValid(email);
         loadNameCombo();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        HomePage h1 =new HomePage();
+        h1.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -550,6 +568,7 @@ boolean valid = EmailValidator.getInstance().isValid(email);
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

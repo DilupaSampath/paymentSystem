@@ -96,6 +96,7 @@ public class unitPayment extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         dt_fixedHours = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -149,7 +150,7 @@ public class unitPayment extends javax.swing.JFrame {
         jButton2.setBounds(340, 10, 50, 30);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(120, 430, 570, 230);
+        jPanel1.setBounds(90, 430, 570, 230);
         jPanel1.setBackground(new Color(0,0,10,130));
 
         jPanel2.setLayout(null);
@@ -246,14 +247,24 @@ public class unitPayment extends javax.swing.JFrame {
         dt_fixedHours.setBounds(170, 230, 290, 26);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(120, 80, 570, 330);
+        jPanel2.setBounds(90, 80, 570, 330);
         jPanel2.setBackground(new Color(0,0,10,130));
+
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home.png"))); // NOI18N
+        jButton6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(0, 255, 255)));
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6);
+        jButton6.setBounds(720, 20, 50, 50);
 
         jLabel2.setFont(new java.awt.Font("Constantia", 3, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Unit Payment Settings Form");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(80, 20, 700, 50);
+        jLabel2.setBounds(50, 20, 700, 50);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Register.jpg"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -378,6 +389,13 @@ public class unitPayment extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        HomePage h1 =new HomePage();
+        h1.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -426,6 +444,7 @@ public class unitPayment extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
