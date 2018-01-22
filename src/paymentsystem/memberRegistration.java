@@ -45,6 +45,9 @@ public class memberRegistration extends javax.swing.JFrame {
         loadNameCombo();
         tableLoad();
     }
+  
+    
+    
     
      boolean isValidEmail(String email)
  {

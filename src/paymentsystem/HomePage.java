@@ -47,6 +47,7 @@ public class HomePage extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         jButton1.setBackground(new java.awt.Color(153, 255, 255));
+        jButton1.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(0, 0, 255));
         jButton1.setText("Daily Update Settings");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -55,9 +56,10 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(550, 260, 160, 90);
+        jButton1.setBounds(530, 260, 190, 90);
 
         jButton2.setBackground(new java.awt.Color(153, 255, 255));
+        jButton2.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 0, 255));
         jButton2.setText("Member Registration");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -66,9 +68,10 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(110, 260, 150, 90);
+        jButton2.setBounds(90, 260, 190, 90);
 
         jButton3.setBackground(new java.awt.Color(153, 255, 255));
+        jButton3.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 0, 255));
         jButton3.setText("Unit Payment Settings");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -77,9 +80,10 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-        jButton3.setBounds(190, 410, 150, 90);
+        jButton3.setBounds(190, 390, 190, 90);
 
         jButton4.setBackground(new java.awt.Color(153, 255, 255));
+        jButton4.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 0, 255));
         jButton4.setText("adminDashBoard");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -88,9 +92,10 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton4);
-        jButton4.setBounds(410, 410, 150, 90);
+        jButton4.setBounds(430, 390, 190, 90);
 
         jButton5.setBackground(new java.awt.Color(153, 255, 255));
+        jButton5.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(0, 0, 255));
         jButton5.setText("Daily Update");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -99,13 +104,13 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-        jButton5.setBounds(330, 260, 140, 90);
+        jButton5.setBounds(340, 260, 140, 90);
 
-        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 1, 40)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Main Menu");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(290, 50, 290, 50);
+        jLabel2.setBounds(290, 50, 320, 50);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background-wallpapers-2.jpg"))); // NOI18N
         getContentPane().add(jLabel1);

@@ -14,11 +14,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import paymentsystem.dailyUpdate;
 
@@ -44,6 +47,24 @@ public class adminDashBoard extends javax.swing.JFrame {
         tableLoad();
         txt_additional.setText("0");
         //jPanel1.setBackground(new Color(0,0,10,130));
+    }
+    Boolean checkIfPaid(String name, String date){
+    
+      try {
+            String sql = "SELECT * FROM `monthlypaymenttable` WHERE `memberName` ='"+name+"' and `PaidMonth`= '"+date+"'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                String Mname = rs.getString("memberName");
+                System.out.println("Paid this month");
+                return true;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        
+        System.out.println("Not this month");
+    return false;
     }
     
     String FindMemberEmail(String name) {
@@ -166,6 +187,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         cmb_yearmonthSearch = new javax.swing.JComboBox();
         jButton5 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btn_start = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -186,9 +208,8 @@ public class adminDashBoard extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         txt_additional = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -251,7 +272,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         cmb_yearmonthSearch.setBounds(240, 10, 100, 26);
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search1.png"))); // NOI18N
-        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(51, 255, 255), new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255)));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -259,6 +280,16 @@ public class adminDashBoard extends javax.swing.JFrame {
         });
         jPanel2.add(jButton5);
         jButton5.setBounds(400, 6, 40, 40);
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete128.png"))); // NOI18N
+        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(102, 255, 255)));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton3);
+        jButton3.setBounds(460, 6, 40, 40);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(40, 80, 720, 280);
@@ -387,28 +418,17 @@ public class adminDashBoard extends javax.swing.JFrame {
         });
         jPanel1.add(jButton2);
         jButton2.setBounds(500, 180, 40, 40);
+        jPanel1.add(txt_additional);
+        txt_additional.setBounds(150, 160, 100, 26);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete128.png"))); // NOI18N
-        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(102, 255, 255)));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton3);
-        jButton3.setBounds(360, 180, 40, 40);
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/update128.png"))); // NOI18N
-        jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(102, 255, 255)));
+        jButton4.setText("jButton4");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
         jPanel1.add(jButton4);
-        jButton4.setBounds(430, 180, 40, 40);
-        jPanel1.add(txt_additional);
-        txt_additional.setBounds(150, 160, 100, 26);
+        jButton4.setBounds(440, 180, 40, 40);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(40, 390, 720, 260);
@@ -488,24 +508,44 @@ public class adminDashBoard extends javax.swing.JFrame {
         String Date = getCurrentDate();
         String PaidAmount = lbl_tot.getText();
         String ToPayAmount = txt_additional.getText();
+        String NormalHrs = lbl_totNormalHours.getText();
+        String OtHrs = lbl_OtHours.getText();
+        String cmb_PaidForMonth = cmb_yearmonth.getSelectedItem().toString();
+        
+           if(checkIfPaid(cmbox_name.getSelectedItem().toString(),cmb_yearmonth.getSelectedItem().toString()))
+        {
+        
+        JOptionPane.showMessageDialog(null, "We Paid to "+cmbox_name.getSelectedItem().toString()+" for "+cmb_yearmonth.getSelectedItem().toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
+           else
+           {
         try {
-            String CurrentStatusQuary = "INSERT INTO `monthlypaymenttable`(`MemberId`, `MemberName`, `Date`, `PaidAmount`, `ToPay`) VALUES ('" + MemberId + "','" + MemberName + "','" + Date + "','" + PaidAmount + "','" + ToPayAmount + "')";
+            String CurrentStatusQuary = "INSERT INTO `monthlypaymenttable`(`memberId`, `memberName`, `Date`, `NormalHours`, `OtHours`, `PaidMonth`, `PaidAmount`, `ToPay`) VALUES  ('" + MemberId + "','" + MemberName + "','" + Date + "','"+NormalHrs+"','"+OtHrs+"','"+cmb_PaidForMonth+"','" + PaidAmount + "','" + ToPayAmount + "')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
 
             pst = conn.prepareStatement(CurrentStatusQuary);
             pst.execute();   //System.out.println(getgender());
-            JOptionPane.showMessageDialog(null, "Rs." + PaidAmount + " Paid Success fully");
+            JOptionPane.showMessageDialog(null, "Rs." + PaidAmount + " Paid Success fully to "+MemberName);
             tableLoad();
         } catch (Exception e) {
         }
-
+           }
     }//GEN-LAST:event_btn_start1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+            if(checkIfPaid(cmbox_name.getSelectedItem().toString(),cmb_yearmonth.getSelectedItem().toString()))
+        {
+        
+        JOptionPane.showMessageDialog(null, "We Paid to "+cmbox_name.getSelectedItem().toString()+" for "+cmb_yearmonth.getSelectedItem().toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
         double tot = Double.parseDouble(lbl_tot.getText());
         double totAdd = Double.parseDouble(txt_additional.getText());
         lbl_tot.setText(Double.toString(tot+totAdd));
+        
+       
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -528,12 +568,17 @@ public class adminDashBoard extends javax.swing.JFrame {
       
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void paidAmountTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paidAmountTableMouseClicked
         // TODO add your handling code here:
+       /* 
+              DefaultTableModel model = (DefaultTableModel)paidAmountTable.getModel();
+           int selectedRowIndex = paidAmountTable.getSelectedRow();
+            cmb_yearmonth.setSelectedItem(model.getValueAt(selectedRowIndex, 0).toString());
+            cmbox_name.setSelectedItem(model.getValueAt(selectedRowIndex, 2).toString());
+            lbl_totNormalHours.setText(model.getValueAt(selectedRowIndex, 4).toString());
+            lbl_OtHours.setText(model.getValueAt(selectedRowIndex, 5).toString());
+            lbl_netSal.setText(model.getValueAt(selectedRowIndex, 6).toString());
+        */
     }//GEN-LAST:event_paidAmountTableMouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -562,7 +607,46 @@ public class adminDashBoard extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+         DefaultTableModel model = (DefaultTableModel)paidAmountTable.getModel();
+         int selectedRowIndex = paidAmountTable.getSelectedRow();
+         //txt_MemberID.setText(model.getValueAt(selectedRowIndex, 0).toString());
+        
+        String memberName = model.getValueAt(selectedRowIndex, 2).toString();
+        String PaidForMonth = model.getValueAt(selectedRowIndex, 6).toString();
+          //  String memberName = txt_MemberName.getText();
+                 try {
+            String deleteQuary = "DELETE FROM `monthlypaymenttable` WHERE `memberName`='"+memberName+"' and `PaidMonth`='"+PaidForMonth+"'";
+             pst = conn.prepareStatement(deleteQuary);
+            pst.execute();
+            JOptionPane.showMessageDialog(null,memberName+"'s"+ " record deleted successfully");
+            tableLoad();
+        
+           
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        if(checkIfPaid(cmbox_name.getSelectedItem().toString(),cmb_yearmonth.getSelectedItem().toString()))
+        {
+        
+        JOptionPane.showMessageDialog(null, "We Paid to "+cmbox_name.getSelectedItem().toString()+" for "+cmb_yearmonth.getSelectedItem().toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        
+        }
+        else
+        {
+        JOptionPane.showMessageDialog(null, "We are not yet paid to "+cmbox_name.getSelectedItem().toString()+" for "+cmb_yearmonth.getSelectedItem().toString());
+        
+        }
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
