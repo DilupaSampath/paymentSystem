@@ -54,7 +54,7 @@ public class dailyUpdate extends javax.swing.JFrame {
         loadcombobox();
         tableLoad();
         loadDateCombo();
-        jButton1.setVisible(false);
+        //jButton1.setVisible(false);
     }
     Boolean checkCoboBoxEmptySelected()
     {
@@ -320,6 +320,21 @@ public class dailyUpdate extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+   String CheckCurrentStatus(String name){
+      try {
+            String sql = "SELECT * FROM `currentstatus` WHERE `MemberName` ='"+name+"' ";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                String Cstatus = rs.getString("CurrentStatus");
+                return Cstatus;
+             
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+   return null;
+   }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -345,7 +360,6 @@ public class dailyUpdate extends javax.swing.JFrame {
         btn_stop = new javax.swing.JButton();
         cmbx_currentMembers = new javax.swing.JComboBox();
         btn_Restart = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -467,15 +481,6 @@ public class dailyUpdate extends javax.swing.JFrame {
         jPanel1.add(btn_Restart);
         btn_Restart.setBounds(230, 110, 70, 70);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(150, 210, 73, 23);
-
         getContentPane().add(jPanel1);
         jPanel1.setBounds(150, 90, 540, 250);
         //jPanel1.setBackground(new Color(0,0,10,130));
@@ -488,7 +493,8 @@ public class dailyUpdate extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
-
+ String Status =CheckCurrentStatus(cmbx_currentMembers.getSelectedItem().toString());
+  if((Status.equals("OffTime"))){
         if(!(checkCoboBoxEmptySelected())){
         
         JDialog.setDefaultLookAndFeelDecorated(true);
@@ -524,7 +530,7 @@ public class dailyUpdate extends javax.swing.JFrame {
             conn.close();
             conn = DB_connect.connect();
             pst = conn.prepareStatement(dailyUpdateQuary);
-            pst.execute(); 
+            pst.execute();
              tableLoad();
         } catch (Exception e) {
             System.out.println(e);
@@ -536,14 +542,24 @@ public class dailyUpdate extends javax.swing.JFrame {
         else
         {
         
-          JOptionPane.showMessageDialog(null, "Select Member Name First", "Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(null, "Please select the name before this action ", "Error", JOptionPane.ERROR_MESSAGE);
         
         }
+  }
+  else
+  {
+  JOptionPane.showMessageDialog(null, "Please end the last day you work before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+  
+  }
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
         // TODO add your handling code here:
-        
+      String Status =CheckCurrentStatus(cmbx_currentMembers.getSelectedItem().toString());
+       if(!(checkCoboBoxEmptySelected())){
+      
+      if(!(Status.equals("OffTime")))
+      {
         
         JDialog.setDefaultLookAndFeelDecorated(true);
     int response = JOptionPane.showConfirmDialog(null, "Do you need to go outdoor activity ?", "Confirm",
@@ -581,10 +597,24 @@ public class dailyUpdate extends javax.swing.JFrame {
     } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
     }
+      }
+      else{
+       JOptionPane.showMessageDialog(null, "Please Start the day before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+      
+      }
+       }
+       else
+       {
+       JOptionPane.showMessageDialog(null, "Please select the name before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+       }
     }//GEN-LAST:event_btn_pauseActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
-
+ String Status =CheckCurrentStatus(cmbx_currentMembers.getSelectedItem().toString());
+ 
+ if(!(checkCoboBoxEmptySelected())){
+      if(!(Status.equals("OffTime")))
+      {
         JDialog.setDefaultLookAndFeelDecorated(true);
     int response = JOptionPane.showConfirmDialog(null, "Do you need to end the day ?", "Confirm",
         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -617,15 +647,23 @@ public class dailyUpdate extends javax.swing.JFrame {
     } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
     }
-        
-        
+      }
+      else
+      {
+      JOptionPane.showMessageDialog(null, "Please Start the day before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+      }
+ }
+ else
+ {
+  JOptionPane.showMessageDialog(null, "Please select the name before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+ }
         
 
     }//GEN-LAST:event_btn_stopActionPerformed
 
     private void btn_RestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RestartActionPerformed
         // TODO add your handling code here:
-
+ if(!(checkCoboBoxEmptySelected())){
         JDialog.setDefaultLookAndFeelDecorated(true);
     int response = JOptionPane.showConfirmDialog(null, "Do you need to restart the work ?", "Confirm",
         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -666,6 +704,12 @@ public class dailyUpdate extends javax.swing.JFrame {
     } else if (response == JOptionPane.CLOSED_OPTION) {
       System.out.println("JOptionPane closed");
     }
+ }
+ else
+ {
+  JOptionPane.showMessageDialog(null, "Please select the name before this action ", "Error", JOptionPane.ERROR_MESSAGE);
+ 
+ }
     }//GEN-LAST:event_btn_RestartActionPerformed
 
     private void cmbx_currentMembersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbx_currentMembersActionPerformed
@@ -739,19 +783,6 @@ public class dailyUpdate extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        System.out.println(CurrentTime());
-
-        String cmbName = cmbx_currentMembers.getSelectedItem().toString();
-
-        //Calendar now = Calendar.getInstance();   // Gets the current date and time
-        // int year = now.get(Calendar.YEAR);
-        // System.out.println(year+" ->yrar");
-        //  System.out.println(getFixedHours(cmbName)+" -> fixed hours");
-        System.out.println(((FindFullHrs()/3600)-(getDailyOutHours(cmbName)/3600))-getFixedHours(cmbName)+" -> OT hours");
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -799,7 +830,6 @@ public class dailyUpdate extends javax.swing.JFrame {
     private javax.swing.JComboBox cmb_searchDailyMembername;
     private javax.swing.JComboBox cmb_yearmonth;
     private javax.swing.JComboBox cmbx_currentMembers;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
