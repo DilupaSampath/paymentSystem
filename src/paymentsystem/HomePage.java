@@ -20,6 +20,11 @@ public class HomePage extends javax.swing.JFrame {
      */
     public HomePage() {
         initComponents();
+        
+    }
+        public HomePage(String Wname) {
+        initComponents();
+        
     }
 
     /**
@@ -125,6 +130,7 @@ public class HomePage extends javax.swing.JFrame {
             memberRegistration m1 = new memberRegistration();
             m1.setVisible(true);
             this.dispose();
+           
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -147,40 +153,57 @@ public class HomePage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        dailyUpdateEdit du1;
+        User u1 =new User();
+        u1.setUserName("DUS");
+        
+        login lg;
         try {
-            du1 = new dailyUpdateEdit();
-             du1.setVisible(true);
+            lg = new login();
+            lg.setVisible(true);
             this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+       
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+         User u1 =new User();
+        u1.setUserName("UPS");
         
+        login lg;
         try {
-            unitPayment up1 = new unitPayment();
-             up1.setVisible(true);
-            this.dispose();
+            lg = new login();
+              lg.setVisible(true);
+              this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
+        
+     
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-  
-           
+      User u1 =new User();
+        u1.setUserName("ADB");
+        
+        login lg;
         try {
-            adminDashBoard ad1 = new adminDashBoard();
-             ad1.setVisible(true);
-            this.dispose();
+            lg = new login();
+             lg.setVisible(true);
+             this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+       
+          
+           
+   
         
         
     }//GEN-LAST:event_jButton4ActionPerformed
