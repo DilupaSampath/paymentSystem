@@ -51,6 +51,7 @@ public class dailyUpdate extends javax.swing.JFrame {
     public dailyUpdate() throws SQLException {
         initComponents();
         conn = DB_connect.connect();
+        cmb_holidayBox.setVisible(false);
         loadcombobox();
         tableLoad();
         loadDateCombo();
@@ -96,9 +97,9 @@ public class dailyUpdate extends javax.swing.JFrame {
 
     void updateDailyStatusTable(String status) {
         String mId = FindMemberId(cmbx_currentMembers.getSelectedItem().toString());
-        String mDate ="2018-01-22";//getCurrentDate();
+        String mDate =getCurrentDate();
         String mName = cmbx_currentMembers.getSelectedItem().toString();
-        String mTime ="22:45:00";//CurrentTime();
+        String mTime =CurrentTime();
 
         try {
             String CurrentStatusQuary = "INSERT INTO `dailystatus`(`MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('" + mId + "','" + mName + "','" + mDate + "','" + mTime + "','" + status + "')";
@@ -106,7 +107,7 @@ public class dailyUpdate extends javax.swing.JFrame {
 
             pst = conn.prepareStatement(CurrentStatusQuary);
             pst.execute();   //System.out.println(getgender());
-            JOptionPane.showMessageDialog(null, "OK");
+            //JOptionPane.showMessageDialog(null, "OK");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -189,24 +190,48 @@ public class dailyUpdate extends javax.swing.JFrame {
     }
 
     void setHoursAndOtHoursToDatabase(String MemberId, String MemberName, String Date) {
+        String NormalHours = "0";
+        String HNormalHours="0";
+        String OtHours ="0";
+        String HOtHours="0";
+        
+        String holidayType =cmb_holidayBox.getSelectedItem().toString();
         double w = Math.round(getDailyOutHours(MemberName) / 3600);
         double o =getDailyOutHours(MemberName) / 3600.00;
         int u = FindFullHrs();
         double p = FindFullHrs() / 3600.00;
         DecimalFormat f = new DecimalFormat("##.00");
-        String  i= f.format(FindFullHrs() / 3600.00);
         
         
-        String NormalHours =f.format(((FindFullHrs() / 3600.00) - (getDailyOutHours(MemberName) / 3600.00)));
-        String OtHours =f.format(((FindFullHrs() / 3600.00) -(getDailyOutHours(MemberName) / 3600.00))- getFixedHours(MemberName) );
-       //--change int NormalHours = (int) (Math.round((FindFullHrs() / 3600)) -Math.round((getDailyOutHours(MemberName) / 3600)));
+        HNormalHours= f.format(FindFullHrs() / 3600.00);
+        if((FindFullHrs() / 3600.00 > getFixedHours(MemberName)))
+        {
+        HOtHours = f.format((FindFullHrs() / 3600.00 - getFixedHours(MemberName)));
+        }
+        
+        NormalHours =f.format(((FindFullHrs() / 3600.00) - (getDailyOutHours(MemberName) / 3600.00)));
+        
+        if(((FindFullHrs() / 3600.00) -(getDailyOutHours(MemberName) / 3600.00))> getFixedHours(MemberName))
+        {
+        OtHours =f.format(((FindFullHrs() / 3600.00) -(getDailyOutHours(MemberName) / 3600.00))- getFixedHours(MemberName) );
+        }
+//--change int NormalHours = (int) (Math.round((FindFullHrs() / 3600)) -Math.round((getDailyOutHours(MemberName) / 3600)));
        //--change int OtHours = (int) ((Math.round((FindFullHrs() / 3600)) - Math.round(getDailyOutHours(MemberName) / 3600)) - getFixedHours(MemberName));
         try {
+              if(dailyUpdateCheckBox.isSelected())
+            {
+             String CurrentStatusQuary = "INSERT INTO `finaleholidaystatustable`(`MemberID`, `MemberName`, `Date`, `HolidayType`, `AdminStatus`, `NormalHours`, `OtHours`) VALUES('" + MemberId + "','" + MemberName + "','" + Date + "','"+holidayType+"','Pending','" + HNormalHours + "','" + HOtHours + "')";
+                 pst = conn.prepareStatement(CurrentStatusQuary);
+                  pst.execute() ;
+              
+            }
+              else{
+                  
             String CurrentStatusQuary = "INSERT INTO `dailyhours`(`MemberId`, `MemberName`, `Date`, `NormalHours`, `OtHours`) VALUES ('" + MemberId + "','" + MemberName + "','" + Date + "','" + NormalHours + "','" + OtHours + "')";
-            //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
-
+            //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';   
             pst = conn.prepareStatement(CurrentStatusQuary);
-            pst.execute();   //System.out.println(getgender());     
+            pst.execute();   //System.out.println(getgender()); 
+              }
            // JOptionPane.showMessageDialog(null, "OK");
         } catch (Exception e) {
             System.out.println(e);
@@ -225,9 +250,18 @@ public class dailyUpdate extends javax.swing.JFrame {
         String mId = FindMemberId(cmbx_currentMembers.getSelectedItem().toString());
         String mDate =getCurrentDate();
         try {
+              if(dailyUpdateCheckBox.isSelected())
+            {
+            String sql = "SELECT * FROM `holidayworkingtable` where `MemberID`='" + mId + "' and `Date` = '" + mDate + "'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+            }
+              else
+              {
             String sql = "SELECT * FROM `dailystatus` where `MemberId`='" + mId + "' and `Date` = '" + mDate + "'";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery(sql);
+              }
             int i = 0;
             while (rs.next()) {
                 String MStatus = rs.getString("Status");
@@ -360,6 +394,8 @@ public class dailyUpdate extends javax.swing.JFrame {
         btn_stop = new javax.swing.JButton();
         cmbx_currentMembers = new javax.swing.JComboBox();
         btn_Restart = new javax.swing.JButton();
+        dailyUpdateCheckBox = new javax.swing.JCheckBox();
+        cmb_holidayBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -469,7 +505,7 @@ public class dailyUpdate extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cmbx_currentMembers);
-        cmbx_currentMembers.setBounds(140, 20, 230, 26);
+        cmbx_currentMembers.setBounds(60, 20, 230, 26);
 
         btn_Restart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ReStart.png"))); // NOI18N
         btn_Restart.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153)));
@@ -480,6 +516,19 @@ public class dailyUpdate extends javax.swing.JFrame {
         });
         jPanel1.add(btn_Restart);
         btn_Restart.setBounds(230, 110, 70, 70);
+
+        dailyUpdateCheckBox.setText("Holiday");
+        dailyUpdateCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dailyUpdateCheckBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(dailyUpdateCheckBox);
+        dailyUpdateCheckBox.setBounds(351, 210, 80, 23);
+
+        cmb_holidayBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Holiday Type", "Poya Day", "Holiday", "Other" }));
+        jPanel1.add(cmb_holidayBox);
+        cmb_holidayBox.setBounds(320, 20, 150, 30);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(150, 90, 540, 250);
@@ -493,7 +542,9 @@ public class dailyUpdate extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
- String Status =CheckCurrentStatus(cmbx_currentMembers.getSelectedItem().toString());
+ 
+        
+        String Status =CheckCurrentStatus(cmbx_currentMembers.getSelectedItem().toString());
   if((Status.equals("OffTime"))){
         if(!(checkCoboBoxEmptySelected())){
         
@@ -517,20 +568,49 @@ public class dailyUpdate extends javax.swing.JFrame {
         String id = FindMemberId(memberName);
         String date = getCurrentDate();
         String time = CurrentTime();
+        String holidayType = cmb_holidayBox.getSelectedItem().toString();
         try {
+            if(dailyUpdateCheckBox.isSelected())
+            {
+         
+            String dailyUpdateQuaryForHoliday = "INSERT INTO `holidayaprovetable`(`MemberID`, `MemberName`, `Date`, `HolidayType`, `Status`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+holidayType+"','Pending')";
+            pst = conn.prepareStatement(dailyUpdateQuaryForHoliday);
+            pst.execute();
+             pst=null;
+            conn.close();
+            conn = DB_connect.connect();
+           
+            String dailyUpdateQuary = "INSERT INTO `holidayworkingtable`(`MemberID`, `MemberName`, `Date`, `HolidayType`, `Status`,`AdminStatus`,`time`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+holidayType+"','OnTime','Pending','"+time+"')";
+            
+            pst = conn.prepareStatement(dailyUpdateQuary);
+            pst.execute();
+            
+            
+            }
+            else
+            {
             String dailyUpdateQuary = "INSERT INTO `dailystatus`(`MemberId`, `MemberName`, `Date`, `Time`, `Status`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+time+"','OnTime')";
+            
+            pst = conn.prepareStatement(dailyUpdateQuary);
+            pst.execute();
+            
+            }
+            
+           pst=null;
+           conn.close();
+           conn = DB_connect.connect();
+            
            // String OnTimeQuary = "INSERT INTO `currentstatus`(`memberName`, `CurrentStatus`) VALUES ('"+memberName+"','OnTime')";
             //UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '"+memberName+"';
             String CurrentStatusQuary = "UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '" + memberName + "'";
+            
+            //String CurrentStatusQuaryForHoliday = "UPDATE `currentstatus` SET  `CurrentStatus` = 'OnTime' where `memberName`= '" + memberName + "'";
             pst = conn.prepareStatement(CurrentStatusQuary);
             //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
             pst.execute();   //System.out.println(getgender());
             JOptionPane.showMessageDialog(null, " good Morning  " + memberName + "");
-            pst=null;
-            conn.close();
-            conn = DB_connect.connect();
-            pst = conn.prepareStatement(dailyUpdateQuary);
-            pst.execute();
+       
+           
              tableLoad();
         } catch (Exception e) {
             System.out.println(e);
@@ -628,7 +708,26 @@ public class dailyUpdate extends javax.swing.JFrame {
         btn_start.setVisible(true);
         btn_stop.setVisible(true);
         
+         if(dailyUpdateCheckBox.isSelected())
+            {
+        String memberName = cmbx_currentMembers.getSelectedItem().toString();
+        String id = FindMemberId(memberName);
+        String date = getCurrentDate();
+        String time = CurrentTime();
+        String holidayType = cmb_holidayBox.getSelectedItem().toString();
+        try {
+        String dailyUpdateQuary = "INSERT INTO `holidayworkingtable`(`MemberID`, `MemberName`, `Date`, `HolidayType`, `Status`,`AdminStatus`,`time`) VALUES ('"+id+"','"+memberName+"','"+date+"','"+holidayType+"','OffTime','Pending','"+time+"')";
+              pst = conn.prepareStatement(dailyUpdateQuary);
+                pst.execute();
+          } catch (SQLException ex) {
+              Logger.getLogger(dailyUpdate.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          
+            }
+         else
+         {
         updateDailyStatusTable("OffTime");
+         }
         String cmbName = cmbx_currentMembers.getSelectedItem().toString();
         System.out.println(cmbName);
 
@@ -637,8 +736,8 @@ public class dailyUpdate extends javax.swing.JFrame {
             pst = conn.prepareStatement(pause);
             pst.execute();
             JOptionPane.showMessageDialog(null, "You are off for the day " + cmbName);
-          //  setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), getCurrentDate());
-             setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), "2018-01-22");
+         setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), getCurrentDate());
+             //setHoursAndOtHoursToDatabase(FindMemberId(cmbx_currentMembers.getSelectedItem().toString()), cmbx_currentMembers.getSelectedItem().toString(), "2018-01-22");
             System.out.println("done 2nd quary");
              tableLoad();
         } catch (SQLException ex) {
@@ -783,6 +882,28 @@ public class dailyUpdate extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void dailyUpdateCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dailyUpdateCheckBoxActionPerformed
+        // TODO add your handling code here:
+        int response = JOptionPane.showConfirmDialog(null, "Do you need to start the day as  ?", "Confirm",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    if (response == JOptionPane.NO_OPTION){
+    dailyUpdateCheckBox.setSelected(false);
+          cmb_holidayBox.setVisible(false);
+    }
+    else
+        if(response == JOptionPane.YES_OPTION)
+        {
+         dailyUpdateCheckBox.setSelected(true);
+         cmb_holidayBox.setVisible(true);
+        }
+    else
+        {
+        
+        
+        }
+        
+    }//GEN-LAST:event_dailyUpdateCheckBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -827,9 +948,11 @@ public class dailyUpdate extends javax.swing.JFrame {
     private javax.swing.JButton btn_pause;
     private javax.swing.JButton btn_start;
     private javax.swing.JButton btn_stop;
+    private javax.swing.JComboBox cmb_holidayBox;
     private javax.swing.JComboBox cmb_searchDailyMembername;
     private javax.swing.JComboBox cmb_yearmonth;
     private javax.swing.JComboBox cmbx_currentMembers;
+    private javax.swing.JCheckBox dailyUpdateCheckBox;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;

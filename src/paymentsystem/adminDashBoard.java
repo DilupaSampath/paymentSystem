@@ -210,6 +210,10 @@ public class adminDashBoard extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         txt_additional = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
+        lbl_totHolidaySalary = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        lbl_holidayHours = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -255,7 +259,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         jScrollPane1.setViewportView(paidAmountTable);
 
         jPanel2.add(jScrollPane1);
-        jScrollPane1.setBounds(20, 60, 680, 200);
+        jScrollPane1.setBounds(20, 60, 720, 200);
 
         cmb_SearchMemberName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Member Name" }));
         jPanel2.add(cmb_SearchMemberName);
@@ -292,7 +296,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         jButton3.setBounds(460, 6, 40, 40);
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(40, 80, 720, 280);
+        jPanel2.setBounds(20, 80, 760, 280);
         jPanel2.setBackground(new Color(0,0,10,130));
 
         jPanel1.setLayout(null);
@@ -306,73 +310,73 @@ public class adminDashBoard extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_start);
-        btn_start.setBounds(560, 120, 100, 40);
+        btn_start.setBounds(600, 120, 100, 40);
 
         jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(51, 51, 255));
         jLabel6.setText("Member Name");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(290, 10, 100, 40);
+        jLabel6.setBounds(280, 10, 100, 40);
 
         jLabel8.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 255));
         jLabel8.setText("Date");
         jPanel1.add(jLabel8);
-        jLabel8.setBounds(30, 10, 100, 40);
+        jLabel8.setBounds(10, 10, 100, 40);
 
         jLabel9.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(51, 51, 255));
         jLabel9.setText("Total Normal Hours");
         jPanel1.add(jLabel9);
-        jLabel9.setBounds(30, 70, 130, 40);
+        jLabel9.setBounds(10, 70, 130, 40);
 
         lbl_totNormalHours.setForeground(new java.awt.Color(0, 153, 51));
         lbl_totNormalHours.setText("0");
         jPanel1.add(lbl_totNormalHours);
-        lbl_totNormalHours.setBounds(160, 70, 150, 40);
+        lbl_totNormalHours.setBounds(140, 70, 150, 40);
 
         lbl_OtHours.setForeground(new java.awt.Color(0, 153, 51));
         lbl_OtHours.setText("0");
         jPanel1.add(lbl_OtHours);
-        lbl_OtHours.setBounds(430, 70, 150, 40);
+        lbl_OtHours.setBounds(530, 70, 150, 40);
 
         jLabel10.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(51, 51, 255));
         jLabel10.setText("Total OT Hours");
         jPanel1.add(jLabel10);
-        jLabel10.setBounds(330, 70, 130, 40);
+        jLabel10.setBounds(430, 70, 130, 40);
 
         jLabel11.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(51, 51, 255));
         jLabel11.setText("Net Salary");
         jPanel1.add(jLabel11);
-        jLabel11.setBounds(30, 110, 130, 40);
+        jLabel11.setBounds(10, 110, 130, 40);
 
         lbl_netSal.setForeground(new java.awt.Color(0, 153, 51));
         lbl_netSal.setText("0");
         jPanel1.add(lbl_netSal);
-        lbl_netSal.setBounds(160, 110, 150, 40);
+        lbl_netSal.setBounds(140, 110, 150, 40);
 
         jLabel12.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(51, 51, 255));
         jLabel12.setText("OT Salary");
         jPanel1.add(jLabel12);
-        jLabel12.setBounds(330, 110, 130, 40);
+        jLabel12.setBounds(430, 110, 130, 40);
 
         lbl_totOt.setForeground(new java.awt.Color(0, 153, 51));
         lbl_totOt.setText("0");
         jPanel1.add(lbl_totOt);
-        lbl_totOt.setBounds(430, 110, 150, 40);
+        lbl_totOt.setBounds(530, 110, 150, 40);
 
         jLabel13.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(51, 51, 255));
         jLabel13.setText("Aditional");
         jPanel1.add(jLabel13);
-        jLabel13.setBounds(30, 150, 130, 40);
+        jLabel13.setBounds(10, 150, 130, 40);
 
         lbl_tot.setForeground(new java.awt.Color(0, 153, 51));
         jPanel1.add(lbl_tot);
-        lbl_tot.setBounds(150, 210, 150, 40);
+        lbl_tot.setBounds(120, 210, 150, 40);
 
         btn_start1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/genarate.png"))); // NOI18N
         btn_start1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, null, new java.awt.Color(153, 153, 153), new java.awt.Color(153, 153, 153)));
@@ -382,21 +386,21 @@ public class adminDashBoard extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btn_start1);
-        btn_start1.setBounds(570, 30, 71, 70);
+        btn_start1.setBounds(610, 30, 71, 70);
 
         cmb_yearmonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Date" }));
         jPanel1.add(cmb_yearmonth);
-        cmb_yearmonth.setBounds(100, 20, 160, 26);
+        cmb_yearmonth.setBounds(80, 20, 160, 26);
 
         cmbox_name.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Select Member" }));
         jPanel1.add(cmbox_name);
-        cmbox_name.setBounds(390, 20, 160, 26);
+        cmbox_name.setBounds(380, 20, 160, 26);
 
         jLabel14.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(51, 51, 255));
         jLabel14.setText("Total Salary");
         jPanel1.add(jLabel14);
-        jLabel14.setBounds(30, 210, 130, 40);
+        jLabel14.setBounds(10, 210, 130, 40);
 
         jButton1.setText("Calculate Total");
         jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(0, 255, 255)));
@@ -407,7 +411,7 @@ public class adminDashBoard extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(560, 180, 100, 40);
+        jButton1.setBounds(600, 180, 100, 40);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/emailNew.png"))); // NOI18N
         jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(51, 255, 255), new java.awt.Color(102, 255, 255)));
@@ -417,21 +421,44 @@ public class adminDashBoard extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(500, 180, 40, 40);
+        jButton2.setBounds(540, 180, 40, 40);
         jPanel1.add(txt_additional);
-        txt_additional.setBounds(150, 160, 100, 26);
+        txt_additional.setBounds(130, 160, 100, 26);
 
-        jButton4.setText("jButton4");
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/chekingPaid.png"))); // NOI18N
+        jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 255, 255), new java.awt.Color(102, 255, 255), new java.awt.Color(0, 255, 255), new java.awt.Color(51, 255, 255)));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
         jPanel1.add(jButton4);
-        jButton4.setBounds(440, 180, 40, 40);
+        jButton4.setBounds(470, 180, 50, 40);
+
+        lbl_totHolidaySalary.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_totHolidaySalary.setText("0");
+        jPanel1.add(lbl_totHolidaySalary);
+        lbl_totHolidaySalary.setBounds(350, 110, 130, 40);
+
+        jLabel16.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel16.setText("Holiday Salary");
+        jPanel1.add(jLabel16);
+        jLabel16.setBounds(220, 110, 130, 40);
+
+        jLabel17.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel17.setText("Total Holiday Hours");
+        jPanel1.add(jLabel17);
+        jLabel17.setBounds(220, 70, 130, 40);
+
+        lbl_holidayHours.setForeground(new java.awt.Color(0, 153, 51));
+        lbl_holidayHours.setText("0");
+        jPanel1.add(lbl_holidayHours);
+        lbl_holidayHours.setBounds(350, 70, 130, 40);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(40, 390, 720, 260);
+        jPanel1.setBounds(20, 390, 760, 260);
         //jPanel1.setBackground(new Color(0,0,10,130));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -452,7 +479,7 @@ public class adminDashBoard extends javax.swing.JFrame {
         String date = cmb_yearmonth.getSelectedItem().toString();
         System.out.println(date);
         try {
-
+            String holidayHours = "SELECT SUM(`NormalHours`) AS HNormalHours FROM `finaleholidaystatustable` WHERE `MemberName`='" + name + "' AND `Date` LIKE '" + date + "%' AND `AdminStatus`='Approved'";
             String hours = "SELECT SUM(`NormalHours`) AS numberOfHours, SUM(`OtHours`) AS numberOfOtHours FROM `dailyhours` WHERE `MemberName`= '" + name + "' AND `Date` LIKE '" + date + "%'";
             String salNormalHours = "SELECT `ratePerNormalHour`, `ratePerOtHour` FROM `unitpayment` WHERE `MemberName`= '" + name + "'";
             pst = conn.prepareStatement(hours);
@@ -486,13 +513,22 @@ public class adminDashBoard extends javax.swing.JFrame {
                 lbl_netSal.setText(netSal);
                 String netOt = f.format(salOt * numberOt);
                 lbl_totOt.setText(netOt);
-                lbl_tot.setText(f.format((salHours * numberHours) + (salOt * numberOt)));
+              ///  lbl_tot.setText(f.format((salHours * numberHours) + (salOt * numberOt)));
                 salHours = 0;
                 numberHours = 0;
                 salOt = 0;
                 numberOt = 0;
                 netOt = null;
 
+            }
+            
+            pst = conn.prepareStatement(holidayHours);
+            rs = pst.executeQuery(holidayHours);
+            while (rs.next()) {
+                String salHNormHours = rs.getString("HNormalHours");              
+                double salHours = Double.parseDouble(salHNormHours);
+                lbl_holidayHours.setText(f.format(salHours));
+                lbl_totHolidaySalary.setText(f.format(salHours * 100.00));        
             }
 
         } catch (Exception e) {
@@ -541,9 +577,11 @@ public class adminDashBoard extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "We Paid to "+cmbox_name.getSelectedItem().toString()+" for "+cmb_yearmonth.getSelectedItem().toString(), "Error", JOptionPane.ERROR_MESSAGE);
         
         }
-        double tot = Double.parseDouble(lbl_tot.getText());
+        double nettot = Double.parseDouble(lbl_netSal.getText());
+        double Holidaytot = Double.parseDouble(lbl_totHolidaySalary.getText());
+        double ottotal = Double.parseDouble(lbl_totOt.getText());
         double totAdd = Double.parseDouble(txt_additional.getText());
-        lbl_tot.setText(Double.toString(tot+totAdd));
+        lbl_tot.setText(Double.toString(nettot+Holidaytot+ottotal+totAdd));
         
        
 
@@ -707,6 +745,8 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -716,8 +756,10 @@ public class adminDashBoard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_OtHours;
+    private javax.swing.JLabel lbl_holidayHours;
     private javax.swing.JLabel lbl_netSal;
     private javax.swing.JLabel lbl_tot;
+    private javax.swing.JLabel lbl_totHolidaySalary;
     private javax.swing.JLabel lbl_totNormalHours;
     private javax.swing.JLabel lbl_totOt;
     private javax.swing.JTable paidAmountTable;

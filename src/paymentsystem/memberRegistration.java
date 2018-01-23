@@ -19,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -141,6 +144,10 @@ boolean valid = EmailValidator.getInstance().isValid(email);
 
     void loadNameCombo() {
         try {
+           JComboBox myBox = new JComboBox((ComboBoxModel) cmb_memberSearch);
+DefaultComboBoxModel theModel = (DefaultComboBoxModel)myBox.getModel();
+theModel.removeAllElements();
+
             String sql = "SELECT * FROM `memberdetails`";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery(sql);
@@ -154,6 +161,28 @@ boolean valid = EmailValidator.getInstance().isValid(email);
         }
 
     }
+    
+       void loadNameComboAfterChange() {
+        try {
+           JComboBox myBox = new JComboBox((ComboBoxModel) cmb_memberSearch);
+DefaultComboBoxModel theModel = (DefaultComboBoxModel)myBox.getModel();
+theModel.removeAllElements();
+
+            String sql = "SELECT * FROM `memberdetails`";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery(sql);
+
+            while (rs.next()) {
+                String name = rs.getString("memberName");
+                cmb_memberSearch.addItem(name);
+                //cmb_memberName.addItem(name);
+            }
+        } catch (Exception e) {
+        }
+
+    }
+    
+    
     public void showUser(){
     User currentUser = new User();
     String cUser = currentUser.getUserName();
@@ -393,9 +422,9 @@ boolean valid = EmailValidator.getInstance().isValid(email);
             pst = conn.prepareStatement(NewMemberInsertQuary);
             //JOptionPane.showMessageDialog(null," New Member Added Successfully123.......!!!");
             pst.execute();   //System.out.println(getgender());
-            loadNameCombo() ;
+           loadNameCombo() ;
             tableLoad();
-            addNewMemberToStatusTable(memberName,"newMember");
+            addNewMemberToStatusTable(memberName,"OffTime");
             JOptionPane.showMessageDialog(null, " New Member Added Successfully.......!!!");
         } catch (Exception e) {
             System.out.println(e);
